@@ -1,0 +1,17 @@
+
+.container {
+  margin-top: 100rpx;
+  text-align: center;
+}
+
+.section {
+  margin: 100rpx 80rpx;
+}
+.header {
+  margin-top: 300rpx;
+}
+.h1 {
+  font-size: 80rpx;
+}
+.button {
+}

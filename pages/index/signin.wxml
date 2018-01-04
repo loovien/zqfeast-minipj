@@ -1,0 +1,14 @@
+<view class="container">
+  <view class="user">
+  <image  class="user-avatar" src="{{userinfo.avatarUrl}}" background-size="cover"></image>
+    <text class='user-name'>{{userinfo.nickName}}</text>
+  </view>
+
+    <view class="content">
+        <text class="h1">战旗2017年会</text>
+        <view class='form'>
+          <input class="input" placeholder='请输入您的ID号'></input>
+          <button class='submit' bindtap="submit">提交</button>
+        </view>
+    </view>
+</view>

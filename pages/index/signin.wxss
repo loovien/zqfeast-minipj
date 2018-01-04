@@ -1,0 +1,44 @@
+/* pages/index/signin.wxss */
+
+.user {
+  margin-top: 100rpx;
+  text-align: center;
+  display: block;
+  clear: both;
+}
+
+.user-avatar {
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: 100%;
+}
+.user-name {
+  display: block;
+}
+
+.content {
+  display: block;
+  text-align: center;
+  margin: 60rpx auto;
+}
+
+.h1 {
+  font-size: 80rpx;
+}
+
+.content .form {
+  margin-top: 150rpx;
+  display: inline-block;
+  flex-direction: column;
+}
+
+.input {
+  border: 1rpx solid #ccc;
+  border-radius: 10rpx;
+  line-height: 30rpx;
+  height: 80rpx;
+}
+
+.submit {
+  margin-top: 30rpx;
+}

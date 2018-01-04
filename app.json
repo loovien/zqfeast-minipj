@@ -1,0 +1,14 @@
+{
+  "debug":"true",
+  "pages":[
+    "pages/index/index",
+    "pages/index/signin",
+    "pages/barrage/index"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "战旗年会",
+    "navigationBarTextStyle":"black"
+  }
+}
