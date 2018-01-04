@@ -108,4 +108,9 @@ Page({
     }
   },
 
-})
+  jumpbarrage: function() {
+    wx.redirectTo({
+      url: '../barrage/index',
+    })
+  }
+});

@@ -3,7 +3,7 @@
         <text class="h1">战旗2017年会</text>
     </view>
     <view class="section" bindtap="bindViewTap">
-    <button class='button'>
+    <button class='button' bindtap='jumpbarrage'>
       <text>发弹幕抽奖</text>
     </button>
     </view>
