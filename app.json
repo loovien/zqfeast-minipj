@@ -1,8 +1,8 @@
 {
   "debug":"true",
   "pages":[
-    "pages/index/index",
     "pages/index/signin",
+    "pages/index/index",
     "pages/barrage/index"
   ],
   "window":{
