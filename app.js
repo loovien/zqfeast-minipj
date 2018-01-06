@@ -16,6 +16,7 @@ App({
         wx.login({ // 登录
             success: function(resp) {
                 // 发送 res.code 到后台换取 openId, sessionKey, unionId
+                console.log(resp)
             },
             fail: function(resp) {
                 wx.showToast({
