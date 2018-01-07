@@ -59,6 +59,7 @@
   <!-- 中奖弹窗 -->
   <view class="winning-ibox">
     <image src="img/winning-bg.png"></image>
+    <view class="close"></view>
   </view>
 
   <!-- 抽奖开启弹窗 -->
