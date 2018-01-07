@@ -18,6 +18,7 @@ page .chat-bottom{
 .container{
   padding:7rpx 24rpx;
   height:calc(100% - 98rpx);
+  
 }
 .container .connect{
   margin-bottom:10rpx;

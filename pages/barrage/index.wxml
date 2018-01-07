@@ -1,6 +1,6 @@
 <view class="chat-content" bindtouchmove='bindTouchMove'>
   <image class="chat-bg" src="img/bg.jpg"></image>
-  <view class="container">
+  <scroll-view class="container" scroll-y='{{isScroll}}' bindscroll='bindIsScroll' scroll-into-view='last{{danmakuList.length}}'>
     <view class="connect">
       <view>正在连接弹幕服务器...</view>
       <view>服务器开小差了，请退出该页面，重新进入再试一下，再试一下，请一定再试一下！</view>
@@ -10,10 +10,11 @@
     <!--自己加 myself 类-->
     <view class="chat-li" wx:key wx:for="{{danmakuList}}">
       <view class="chat-li-cont">
-        <view class="name">张吗：</view>{{item.content}}
+        <view class="name">张吗：</view>11111111111111
       </view>
     </view>
-  </view>
+    <view id='last{{danmakuList.length}}'></view>
+  </scroll-view>
   <!-- 激活速弹加类 active-fast -->
   <view class="chat-bottom {{isHot ? 'active-fast':''}}" wx:if="{{isVerify}}">
     <view class="chat-input-area">
@@ -37,9 +38,9 @@
       </ul>
     </view>
     <!--信息提示 -->
-    <view class="message-title">
+    <view class="message-title" wx:if='{{isMore}}' catchtap='bindMoreMessage'>
       <image src="img/dm-nums.png"></image>
-      <view class="num">999</view>
+      <view class="num">{{isMore}}</view>
     </view>
   </view>
   <!-- 节目单 -->

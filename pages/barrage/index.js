@@ -13,6 +13,7 @@ Page({
     isWinning: false,
     isHot: false,
     isDisable: false,
+    isMore:0,
     userInfo: app.globalData.userInfo,
     danmakuContent: '',
   },
@@ -42,7 +43,14 @@ Page({
         danmakuList: list,
       })
       this.bindScroll();
-    }, 1000000)
+
+      if (!this.data.isScroll) {
+        this.setData({
+          isMore:this.data.isMore+1
+        })
+        console.log(this.data.isMore);
+      }
+    }, 1000)
   },
 
   /**
@@ -79,10 +87,13 @@ Page({
   onShareAppMessage: function () {
 
   },
-  bindTouchMove: function () {
+
+  //静止滚动
+  bindTouchMove: function (e) {
     this.setData({
-      isScroll: false,
+      isScroll: false
     })
+    console.log(e.target.offsetTop);
   },
 
   //节目单展示
@@ -122,11 +133,20 @@ Page({
         nickName: this.data.userInfo.nickName
       }
     )
-
     this.setData({
       danmakuList: danmakuList
     })
   },
+
+  //更多消息
+  bindMoreMessage:function(){
+    this.setData({
+      isMore:0,
+      isScroll:true
+    })
+    this.bindScroll();
+  },
+
   //滚动到最底部
   bindScroll: function () {
     if (this.data.isScroll) {

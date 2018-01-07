@@ -1,8 +1,8 @@
 {
   "debug":"true",
   "pages":[
-    "pages/index/signin",
-    "pages/barrage/index"
+    "pages/barrage/index",
+    "pages/index/signin"
   ],
   "window":{
     "backgroundTextStyle":"light",
