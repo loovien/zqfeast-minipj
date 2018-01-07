@@ -142,9 +142,17 @@ page .chat-bottom{
   width:106rpx;height:160rpx;
   z-index:5;
 }
-.program-btn image{
+.program-btn image,
+.luck-btn image{
   display:block;
   width:100%;height:100%;
+}
+
+.luck-btn{
+  position:fixed;
+  right:10rpx;bottom:400rpx;
+  width:106rpx;height:200rpx;
+  z-index:5;
 }
 
 .program-ibox{
@@ -174,3 +182,60 @@ page .chat-bottom{
   background:rgba(0, 0, 0, .5);
   z-index:8;
 }
+
+.winning-ibox{
+  display:none;
+}
+
+.luck-ibox{
+  position:fixed;
+  top:50%;left:50%;
+  margin:-65rpx 0 0 -260rpx;
+  width:520rpx;height:210rpx;
+  background:#fff;
+  z-index:10;
+}
+.luck-ibox .luck-top{
+  height:130rpx;
+  line-height:130rpx;
+  border-bottom:1rpx solid #b8b9bc;
+  font-size:32rpx;color:#000;
+  text-align:center;
+}
+.luck-ibox .luck-top .num{
+  display:inline-block;
+  color:#26b8f3;
+}
+.luck-ibox .luck-bottom{
+  height:79rpx;line-height:79rpx;
+  font-size:32rpx;color:#000;
+  text-align:center;
+}
+
+.luck-ibox .luck-bottom .btn-1{
+  float:left;
+  width:50%;height:100%;
+  border-right:1rpx solid #b8b9bc;
+}
+.luck-ibox .luck-bottom .btn-2{
+  color:#26b8f3;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

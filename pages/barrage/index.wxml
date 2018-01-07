@@ -74,5 +74,14 @@
   <view class="winning-ibox">
     <image src="img/winning-bg.png"></image>
   </view>
-  
+
+  <!-- 抽奖开启弹窗 -->
+  <view class="luck-ibox">
+    <view class="luck-top">目前发放奖励：<view class="num">56份</view></view>
+    <view class="luck-bottom">
+      <view class="btn-1">取消</view>
+      <view class="btn-2">已开启</view>
+    </view>
+  </view>
+
 </view>
