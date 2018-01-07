@@ -1,14 +1,176 @@
-page{
+page,.chat-content{
   position:relative;
   height:100%;
+  background:#1e195d;
 }
 page .chat-bg{
-  position:absolute;
+  position:fixed;
   top:0;left:0;
   width:100%;height:100%;
   z-index:0;
 }
-page .container{
+page .container,
+page .chat-bottom{
   position:relative;
   z-index:1;
+}
+
+.container{
+  padding:7rpx 24rpx;
+  height:calc(100% - 98rpx);
+}
+.container .connect{
+  margin-bottom:10rpx;
+  font-size:32rpx;
+  line-height:40rpx;
+  color:#11d1e1;
+}
+.container .connect view:first-child{
+  margin-bottom:14rpx;
+}
+
+.container .welcome{
+  margin-bottom:10rpx;
+  line-height:40rpx;
+  font-size:32rpx;
+  color:#11d1e1;
+}
+.container .welcome .name{
+  display:inline-block;
+  color:#cae012;
+  margin:0 12rpx;
+}
+.container .welcome .color{
+  display:inline-block;
+  color:#ff607e;
+}
+
+.container .chat-li{
+  margin-bottom:16rpx;
+  font-size:0;
+}
+.container .chat-li .chat-li-cont{
+  display:inline-block;
+  padding:8rpx 20rpx;
+  border:2rpx solid #105795;
+  background:rgba(21, 129, 204, .2);
+  box-shadow:0px 0px 10px rgba(0, 116, 171, .3) inset;
+  font-size:32rpx;
+  color:#fff;
+}
+
+.container .myself .chat-li-cont{
+  border-color:#f31e46;
+  background:rgba(255, 16, 50, .2);
+  box-shadow:none;
+}
+
+.container .chat-li .chat-li-cont .name{
+  display:inline-block;
+  line-height:46rpx;
+  color:#cae012;
+}
+
+.chat-bottom{
+  position:fixed;
+  bottom:0;left:0;
+  padding:14rpx;
+  height:70rpx; 
+  width:calc(100% - 28rpx);
+  background:rgba(54, 95, 186, .3);
+  overflow:hidden;
+  z-index:4;
+}
+
+.chat-bottom .chat-input-area{
+  height:70rpx;
+  margin-bottom:16rpx;
+  overflow:hidden;
+}
+.chat-bottom .chat-input-area .input-area{
+  float:left;
+  height:66rpx;
+  line-height:66rpx;
+  padding:0 18rpx;
+  width:424rpx;
+  border:2rpx solid #0ba1e9;
+  background:rgba(7,46,135,.8);
+  font-size:32rpx;color:#f4fbff;
+}
+
+.chat-bottom .chat-input-area .fast,
+.chat-bottom .chat-input-area .send{
+  float:right;
+  width:110rpx;height:70rpx;
+}
+
+.chat-bottom .chat-input-area image{
+  display:block;
+  width:100%;height:100%;
+}
+.chat-bottom .chat-input-area .send{
+  margin:0 4rpx 0 22rpx;
+}
+.chat-bottom .chat-input-area .disable{
+  filter:grayscale(100%);
+}
+
+.chat-bottom .fast-ibox{
+  padding:30rpx 24rpx;
+  width:calc(100% - 48rpx);height:470rpx;
+  background:rgba(0, 58, 136, .98);
+}
+.chat-bottom .fast-ibox li{
+  display:block;
+  margin:0 auto 20rpx;
+  height:76rpx;
+  line-height:76rpx;
+  border:2rpx solid #0680bb;
+  background:rgba(21, 129, 204, .2);
+  box-shadow:0px 0px 10px rgba(0, 116, 171, .3) inset;
+  font-size:32rpx;color:#d3e6f1;
+  text-align:center;
+}
+
+.active-fast{
+  height:auto;
+}
+
+.program-btn{
+  position:fixed;
+  right:10rpx;bottom:192rpx;
+  width:106rpx;height:160rpx;
+  z-index:5;
+}
+.program-btn image{
+  display:block;
+  width:100%;height:100%;
+}
+
+.program-ibox{
+  display:none;
+  position:absolute;
+  top:50%;left:50%;
+  width:639rpx;height:1005rpx;
+  margin:-502rpx 0 0 -320rpx;
+  z-index:10;
+}
+.program-ibox image{
+  display:block;
+  width:100%;height:100%;
+}
+.program-ibox .close{
+  position:absolute;
+  top:0;right:0;
+  width:50rpx;height:50rpx;
+  z-index:2;
+}
+
+.mask{
+  display:none;
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:rgba(0, 0, 0, .5);
+  z-index:8;
 }

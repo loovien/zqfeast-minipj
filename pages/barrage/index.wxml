@@ -1,42 +1,49 @@
-<image class="chat-bg" src="img/bg.jpg"></image>
-<view class="container">
-  <view class="connect">
-    <view>正在连接弹幕服务器...</view>
-    <view>服务器开小差了，请退出该页面，重新进入再试一下，再试一下，请一定再试一下。</view>
-  </view>
-  <view class="welcome">欢迎<view class="name">琥珀川</view>进入<view class="color">【战旗直播年终狂欢】</view>请尽情的为战旗打CALL!更有丰富的弹幕礼物，等你来领</view>
-  <!-- 聊天区域 -->
-  <view class="chat-li">
-    <view class="name">张吗：</view>
-    <view class="chat-p">666 这个睫毛夹真大</view>
-  </view>
-  <view class="chat-li myself">
-    <view class="name">张吗：</view>
-    <view class="chat-p">666 这个睫毛</view>
-  </view>
-  <view class="chat-li">
-    <view class="name">张吗张吗张吗：</view>
-    <view class="chat-p">666 这个睫毛夹真大这个睫毛夹真大</view>
-  </view>
-  <view class="chat-li">
-    <view class="name">张吗：</view>
-    <view class="chat-p">666 这个睫毛夹真大</view>
+<view class="chat-content">
+  <image class="chat-bg" src="img/bg.jpg"></image>
+  <view class="container">
+    <view class="connect">
+      <view>正在连接弹幕服务器...</view>
+      <view>服务器开小差了，请退出该页面，重新进入再试一下，再试一下，请一定再试一下！</view>
+    </view>
+    <view class="welcome">欢迎<view class="name">琥珀川</view>进入<view class="color">【战旗直播年终狂欢】</view>请尽情的为战旗打CALL!更有丰富的弹幕礼物，等你来领！</view>
+    <!-- 聊天区域 -->
+    <view class="chat-li">
+      <view class="chat-li-cont">
+        <view class="name">张吗：</view>666 这个睫毛夹真大
+      </view>
+    </view>
+    <view class="chat-li myself">
+      <view class="chat-li-cont">
+        <view class="name">张吗：</view>666 这个睫毛
+      </view>
+    </view>
+    <view class="chat-li">
+      <view class="chat-li-cont">
+        <view class="name">张吗张吗张吗：</view>666 这个睫毛夹真大这个睫毛夹真大
+      </view>
+    </view>
+    <view class="chat-li">
+      <view class="chat-li-cont">
+        <view class="name">张吗：</view>666 这个睫毛夹真大
+      </view>
+    </view>
   </view>
   <!-- 激活速弹加类 active-fast -->
-  <view class="chat-bottom active-fast">
-  	<view class="chat-input-area">
-  		<input class="input-area /"></input>
-      <view class="fast">
-        <image src="img/fast.png"></image>
-      </view>
+  <view class="chat-bottom active-fast1">
+    <view class="chat-input-area">
+      <input class="input-area /"></input>
       <!-- 不能发送加类 disable -->
       <view class="send disable">
         <image src="img/send.png"></image>
       </view>
-  	</view>
+      <view class="fast">
+        <image src="img/fast.png"></image>
+      </view>
+    </view>
     <!-- 速弹弹窗 -->
     <view class="fast-ibox">
       <ul>
+        <li>战旗威武</li>
         <li>战旗威武</li>
         <li>战旗威武</li>
         <li>战旗威武</li>
@@ -49,4 +56,23 @@
     <image src="img/program-btn.png" ></image>
   </view>
 
+  <!-- 抽奖开启按钮 -->
+  <view class="luck-btn">
+    <image src="img/luck-btn.png" ></image>
+  </view>
+
+  <!-- 遮罩 -->
+  <view class="mask"></view>
+
+  <!-- 节目单列表弹窗 -->
+  <view class="program-ibox">
+    <view class="close"></view>
+    <image src="img/program-bg.png"></image>
+  </view>
+
+  <!-- 中奖弹窗 -->
+  <view class="winning-ibox">
+    <image src="img/winning-bg.png"></image>
+  </view>
+  
 </view>
