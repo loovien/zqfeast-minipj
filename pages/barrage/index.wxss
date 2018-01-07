@@ -78,7 +78,6 @@ page .chat-bottom{
   height:70rpx; 
   width:calc(100% - 28rpx);
   background:rgba(54, 95, 186, .3);
-  overflow:hidden;
   z-index:4;
 }
 
@@ -116,6 +115,7 @@ page .chat-bottom{
 }
 
 .chat-bottom .fast-ibox{
+  display:none;
   padding:30rpx 24rpx;
   width:calc(100% - 48rpx);height:470rpx;
   background:rgba(0, 58, 136, .98);
@@ -132,8 +132,31 @@ page .chat-bottom{
   text-align:center;
 }
 
+.chat-bottom .message-title{
+  position:absolute;
+  right:36rpx;top:-80rpx;
+  width:74rpx;height:89rpx;
+  z-index:5;
+}
+.chat-bottom .message-title image{
+  display:block;
+  width:100%;height:100%;
+}
+.chat-bottom .message-title .num{
+  position:absolute;
+  top:0;left:0;
+  width:100%;height:66rpx;
+  line-height:66rpx;
+  font-size:30rpx;color:#fff;
+  text-align:center;
+  z-index:1;
+}
+
 .active-fast{
   height:auto;
+}
+.active-fast .fast-ibox{
+  display:block;
 }
 
 .program-btn{
