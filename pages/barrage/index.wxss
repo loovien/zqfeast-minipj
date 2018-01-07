@@ -261,6 +261,7 @@ page .container{
 
 .guess-btn{
   position:fixed;
+  z-index: 5;
   bottom:200rpx;right:10rpx;
   width:106rpx;height:120rpx;
 }

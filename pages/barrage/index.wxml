@@ -1,6 +1,6 @@
 <view class="chat-content" bindtouchmove='bindTouchMove'>
   <image class="chat-bg" src="img/bg.jpg"></image>
-  <scroll-view class="container" scroll-y='{{isScroll}}' bindscroll='bindIsScroll' scroll-into-view='last{{danmakuList.length}}'>
+  <view class="container" scroll-y='{{isScroll}}'  scroll-into-view='last{{danmakuList.length}}'>
     <view class="connect">
       <view>正在连接弹幕服务器...</view>
       <view>服务器开小差了，请退出该页面，重新进入再试一下，再试一下，请一定再试一下！</view>
@@ -14,7 +14,7 @@
       </view>
     </view>
     <view id='last{{danmakuList.length}}'></view>
-  </scroll-view>
+  </view>
   <!-- 激活速弹加类 active-fast -->
   <view class="chat-bottom {{isHot ? 'active-fast':''}}" wx:if="{{isVerify}}">
     <view class="chat-input-area">
@@ -44,7 +44,7 @@
     </view>
   </view>
   <!-- 节目单 -->
-  <view class="program-btn" bindtap='bindProgramShowState'>
+  <view class="program-btn" bindtap='bindProgramLayer'>
     <image src="img/program-btn.png" ></image>
   </view>
 
@@ -54,13 +54,13 @@
   </view>
 
   <!-- 竞猜按钮 -->
-  <view class="guess-btn">
+  <view class="guess-btn" catchtap='bindGuessLayer'>
     <image src="img/guess-btn.png" ></image>
   </view>
 
   <!-- 竞猜弹窗 -->
-  <view class="guess-ibox">
-    <view class="close"></view>
+  <view class="guess-ibox" wx:if='{{isGuessShow}}'>
+    <view class="close" catchtap='bindGuessLayer'></view>
     <!-- 没有开启加类 no-begin -->
     <view class="guess-top no-begin1">
       <image src="img/guess-top.png" class="guess-top-bg" ></image>
@@ -145,7 +145,7 @@
   </view>
 
   <!-- 竞猜确认弹窗 -->
-  <view class="guess-ibox-1">
+  <view class="guess-ibox-1" wx:if='{{isLayerShow}}'>
     <image src="img/guess-box-1.png" class="guess-bg-1" ></image>
     <view class="guess-top">请确认你的选择</view>
     <view class="guess-bottom">
@@ -158,8 +158,8 @@
   <view class="mask"></view>
 
   <!-- 节目单列表弹窗 -->
-  <view class="program-ibox" wx:if="{{isProgramShow}}">
-    <view class="close" catchtap='bindProgramShowState'></view>
+  <view class="program-ibox" wx:if="{{isProgramState}}">
+    <view class="close" catchtap='bindProgramLayer'></view>
     <image src="img/program-bg.png"></image>
   </view>
 

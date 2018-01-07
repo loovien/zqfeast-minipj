@@ -5,17 +5,18 @@ Page({
    * 页面的初始数据
    */
   data: {
-    isAdmin: false,
-    isVerify: true,
-    danmakuList: [],
+    isAdmin: false, //是否为管理员
+    isVerify: false,//是否ID验证
+    danmakuList: [], //弹幕列表
     isScroll: true,
-    isProgramShow: false,
+    isProgramState: false, //节目列表弹窗状态
     isWinning: false,
-    isHot: false,
-    isDisable: false,
-    isMore:0,
-    userInfo: app.globalData.userInfo,
-    danmakuContent: '',
+    isHot: false, //速弹展示状态
+    isDisable: false, //发送按钮状态
+    isMore:0, //未读消息
+    userInfo: app.globalData.userInfo, //用户信息
+    danmakuContent: '', //弹幕内容
+    isGuessState:false, //竞猜弹窗状态
   },
 
   /**
@@ -88,44 +89,28 @@ Page({
 
   },
 
-  //静止滚动
-  bindTouchMove: function (e) {
-    this.setData({
-      isScroll: false
-    })
-    console.log(e.target.offsetTop);
-  },
-
-  //节目单展示
-  bindProgramShowState: function () {
-    this.setData({
-      isProgramShow: !this.data.isProgramShow,
-    })
-  },
-
-  //关闭中奖弹框
-  bindWinningClose: function () {
+// ----------------------中奖提示---------------//
+  bindWinningClose: function () { //弹框--关
     this.setData({
       isWinning: false,
     })
   },
 
-  //速弹展示
-  bindHotShow: function () {
+//-------------------弹幕----------------//
+  bindHotShow: function () {//速弹--开/关
     this.setData({
       isHot: !this.data.isHot,
     })
     this.bindScroll();
   },
 
-  //获取弹幕内容
-  bindKeyInput: function (e) {
+  bindKeyInput: function (e) {   //获取弹幕内容
     this.setData({
       danmakuContent: e.detail.value
     })
   },
-  //发送弹幕
-  bindSendDanmaku: function () {
+
+  bindSendDanmaku: function () {   //发送弹幕
     let danmakuList = this.data.danmakuList;
     danmakuList.push(
       {
@@ -138,8 +123,7 @@ Page({
     })
   },
 
-  //更多消息
-  bindMoreMessage:function(){
+  bindMoreMessage: function () {  //更多消息
     this.setData({
       isMore:0,
       isScroll:true
@@ -147,12 +131,33 @@ Page({
     this.bindScroll();
   },
 
-  //滚动到最底部
-  bindScroll: function () {
+  //---------------节目单------------------//
+  bindProgramLayer: function () { //弹窗--开/关
+    this.setData({
+      isProgramState: !this.data.isProgramState,
+    })
+  },
+
+  //---------------竞猜------------------//
+  bindGuessLayer:function(){ //弹窗--开/关
+    this.setData({
+      isGuessShow: !this.data.isGuessShow
+    })
+  },
+
+//  ---------------------公用函数-------------
+  bindScroll: function () {  //滚动到最底部
     if (this.data.isScroll) {
       wx.pageScrollTo({
         scrollTop: 999999,
       })
     }
-  }
+  },
+  
+  bindTouchMove: function (e) { //静止滚动
+    this.setData({
+      isScroll: false
+    })
+    console.log(e.target.offsetTop);
+  },
 })
