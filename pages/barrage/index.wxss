@@ -383,7 +383,7 @@ page .container{
   z-index:1;
 }
 .guess-ibox .guess-bottom .tr{
-  height:56rpx;line-height:56px;
+  height:56rpx;line-height:56rpx;
 }
 .guess-ibox .guess-bottom .guess-tbody .li{
   height:56rpx;
