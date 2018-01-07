@@ -5,18 +5,20 @@ Page({
    * 页面的初始数据
    */
   data: {
-    isAdmin: false, //是否为管理员
-    isVerify: false,//是否ID验证
-    danmakuList: [], //弹幕列表
+    isAdmin: true, //是否为管理员
+    isVerify: true,//是否ID验证
+    danmakuList: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1], //弹幕列表
     isScroll: true,
     isProgramState: false, //节目列表弹窗状态
     isWinning: false,
+    isLuckState:false, //弹幕抽奖设置
     isHot: false, //速弹展示状态
-    isDisable: false, //发送按钮状态
+    isDisable: true, //发送按钮状态
     isMore:0, //未读消息
     userInfo: app.globalData.userInfo, //用户信息
     danmakuContent: '', //弹幕内容
     isGuessState:false, //竞猜弹窗状态
+    luckState:true, //是否开启弹幕抽奖
   },
 
   /**
@@ -37,21 +39,21 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    setInterval(() => {
-      let list = this.data.danmakuList;
-      list.push(1);
-      this.setData({
-        danmakuList: list,
-      })
-      this.bindScroll();
+    // setInterval(() => {
+    //   let list = this.data.danmakuList;
+    //   list.push(1);
+    //   this.setData({
+    //     danmakuList: list,
+    //   })
+    //   this.bindScroll();
 
-      if (!this.data.isScroll) {
-        this.setData({
-          isMore:this.data.isMore+1
-        })
-        console.log(this.data.isMore);
-      }
-    }, 1000)
+    //   if (!this.data.isScroll) {
+    //     this.setData({
+    //       isMore:this.data.isMore+1
+    //     })
+    //     console.log(this.data.isMore);
+    //   }
+    // }, 1000)
   },
 
   /**
@@ -129,6 +131,18 @@ Page({
       isScroll:true
     })
     this.bindScroll();
+  },
+
+  //---------------弹幕抽奖---------------//
+  bindLuckLayer:function(){ //设置弹窗--开/关
+    this.setData({
+      isLuckState: !this.data.isLuckState,
+    })
+  },
+  bindLuckState:function(){ //抽奖--开/关
+    this.setData({
+      luckState : !this.data.luckState
+    })
   },
 
   //---------------节目单------------------//

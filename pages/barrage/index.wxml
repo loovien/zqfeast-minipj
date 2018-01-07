@@ -49,7 +49,7 @@
   </view>
 
   <!-- 抽奖开启按钮 -->
-  <view class="luck-btn" wx:if="{{isAdmin}}">
+  <view class="luck-btn" wx:if="{{isAdmin}}" catchtap='bindLuckLayer'>
     <image src="img/luck-btn.png" ></image>
   </view>
 
@@ -170,11 +170,11 @@
   </view>
 
   <!-- 抽奖开启弹窗 -->
-  <view class="luck-ibox" wx:if="{{isAdmin}}">
+  <view class="luck-ibox" wx:if="{{isLuckState}}">
     <view class="luck-top">目前发放奖励：<view class="num">56份</view></view>
     <view class="luck-bottom">
-      <view class="btn-1">取消</view>
-      <view class="btn-2">已开启</view>
+      <view class="btn-1" catchtap='bindLuckLayer'>取消</view>
+      <view class="btn-2" catchtap='bindLuckState'>{{luckState ?'已开启':'已关闭'}}</view>
     </view>
   </view>
 </view>

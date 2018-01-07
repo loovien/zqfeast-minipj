@@ -207,7 +207,7 @@ page .container{
 }
 
 .luck-ibox{
-  display:none;
+  /* display:none; */
   position:fixed;
   top:50%;left:50%;
   margin:-65rpx 0 0 -260rpx;
