@@ -36,6 +36,11 @@
         <li>战旗威武</li>
       </ul>
     </view>
+    <!--信息提示 -->
+    <view class="message-title">
+      <image src="img/dm-nums.png"></image>
+      <view class="num">999</view>
+    </view>
   </view>
   <!-- 节目单 -->
   <view class="program-btn" bindtap='bindProgramShowState'>
