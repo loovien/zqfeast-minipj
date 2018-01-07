@@ -1,9 +1,32 @@
 <view class="container">
   <view class="connect">
-    <view>正钱在连接弹幕服务器...</view>
+    <view>正在连接弹幕服务器...</view>
     <view>服务器开小差了，请退出该页面，重新进入再试一下，再试一下，请一定再试一下。</view>
   </view>
   <view class="welcome">欢迎<view class="name">琥珀川</view>进入<view class="color">【战旗直播年终狂欢】</view>请尽情的为战旗打CALL!更有丰富的弹幕礼物，等你来领</view>
+  <!-- 聊天区域 -->
+  <!-- 激活速弹加类 active-fast -->
+  <view class="chat-bottom active-fast">
+  	<view class="chat-input-area">
+  		<input class="input-area /"></input>
+      <view class="fast">
+        <images src="img/fast.png"></images>
+      </view>
+      <!-- 不能发送加类 disable -->
+      <view class="send disable">
+        <images src="img/send.png"></images>
+      </view>
+  	</view>
+    <!-- 速弹弹窗 -->
+    <view class="fast-ibox">
+      <ul>
+        <li>战旗威武</li>
+        <li>战旗威武</li>
+        <li>战旗威武</li>
+        <li>战旗威武</li>
+      </ul>
+    </view>
+  </view>
 
 
 </view>
