@@ -3,7 +3,7 @@ App({
         var that = this;
         that.fetchUserInfo();
     },
-
+    
     fetchUserInfo: function(callback) {
         var that = this;
         if (that.globalData.userInfo) {

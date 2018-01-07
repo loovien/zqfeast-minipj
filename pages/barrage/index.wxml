@@ -10,19 +10,19 @@
     <!--自己加 myself 类-->
     <view class="chat-li" wx:key wx:for="{{danmakuList}}">
       <view class="chat-li-cont">
-        <view class="name">张吗：</view>666 这个睫毛夹真大
+        <view class="name">张吗：</view>{{item.content}}
       </view>
     </view>
   </view>
   <!-- 激活速弹加类 active-fast -->
-  <view class="chat-bottom active-fast1" wx:if="{{isVerify}}">
+  <view class="chat-bottom {{isHot ? 'active-fast':''}}" wx:if="{{isVerify}}">
     <view class="chat-input-area">
-      <input class="input-area /"></input>
+      <input class="input-area /" bindinput='bindKeyInput'></input>
       <!-- 不能发送加类 disable -->
-      <view class="send disable">
+      <view class="send {{isDisable?'disable':''}}" catchtap='bindSendDanmaku'>
         <image src="img/send.png"></image>
       </view>
-      <view class="fast">
+      <view class="fast" catchtap='bindHotShow'>
         <image src="img/fast.png"></image>
       </view>
     </view>
@@ -38,7 +38,7 @@
     </view>
   </view>
   <!-- 节目单 -->
-  <view class="program-btn">
+  <view class="program-btn" bindtap='bindProgramShowState'>
     <image src="img/program-btn.png" ></image>
   </view>
 
@@ -51,15 +51,15 @@
   <view class="mask"></view>
 
   <!-- 节目单列表弹窗 -->
-  <view class="program-ibox">
-    <view class="close"></view>
+  <view class="program-ibox" wx:if="{{isProgramShow}}">
+    <view class="close" catchtap='bindProgramShowState'></view>
     <image src="img/program-bg.png"></image>
   </view>
 
   <!-- 中奖弹窗 -->
-  <view class="winning-ibox">
+  <view class="winning-ibox" wx:if="{{isWinning}}">
     <image src="img/winning-bg.png"></image>
-    <view class="close"></view>
+    <view class="close" catchtap='bindWinningClose'></view>
   </view>
 
   <!-- 抽奖开启弹窗 -->
@@ -70,5 +70,4 @@
       <view class="btn-2">已开启</view>
     </view>
   </view>
-
 </view>

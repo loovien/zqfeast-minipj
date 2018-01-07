@@ -156,8 +156,8 @@ page .chat-bottom{
 }
 
 .program-ibox{
-  display:none;
-  position:absolute;
+  /* display:none; */
+  position:fixed;
   top:50%;left:50%;
   width:639rpx;height:1005rpx;
   margin:-502rpx 0 0 -320rpx;
@@ -219,8 +219,8 @@ page .chat-bottom{
 }
 
 .winning-ibox{
-  display:none;
-  position:absolute;
+  /* display:none; */
+  position:fixed;
   top:50%;left:50%;
   margin:-300rpx 0 0 -250rpx;
   width:500rpx;height:600rpx;
