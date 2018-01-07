@@ -1,3 +1,4 @@
+<image class="chat-bg" src="img/bg.jpg"></image>
 <view class="container">
   <view class="connect">
     <view>正在连接弹幕服务器...</view>
@@ -5,16 +6,32 @@
   </view>
   <view class="welcome">欢迎<view class="name">琥珀川</view>进入<view class="color">【战旗直播年终狂欢】</view>请尽情的为战旗打CALL!更有丰富的弹幕礼物，等你来领</view>
   <!-- 聊天区域 -->
+  <view class="chat-li">
+    <view class="name">张吗：</view>
+    <view class="chat-p">666 这个睫毛夹真大</view>
+  </view>
+  <view class="chat-li myself">
+    <view class="name">张吗：</view>
+    <view class="chat-p">666 这个睫毛</view>
+  </view>
+  <view class="chat-li">
+    <view class="name">张吗张吗张吗：</view>
+    <view class="chat-p">666 这个睫毛夹真大这个睫毛夹真大</view>
+  </view>
+  <view class="chat-li">
+    <view class="name">张吗：</view>
+    <view class="chat-p">666 这个睫毛夹真大</view>
+  </view>
   <!-- 激活速弹加类 active-fast -->
   <view class="chat-bottom active-fast">
   	<view class="chat-input-area">
   		<input class="input-area /"></input>
       <view class="fast">
-        <images src="img/fast.png"></images>
+        <image src="img/fast.png"></image>
       </view>
       <!-- 不能发送加类 disable -->
       <view class="send disable">
-        <images src="img/send.png"></images>
+        <image src="img/send.png"></image>
       </view>
   	</view>
     <!-- 速弹弹窗 -->
@@ -27,6 +44,9 @@
       </ul>
     </view>
   </view>
-
+  <!-- 节目单 -->
+  <view class="program-btn">
+    <image src="img/program-btn.png" ></image>
+  </view>
 
 </view>
