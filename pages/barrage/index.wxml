@@ -58,6 +58,11 @@
     <image src="img/guess-btn.png" ></image>
   </view>
 
+  <!-- 设置按钮 -->
+  <view class="set-btn">
+    <image src="img/set-btn.png" ></image>
+  </view>
+
   <!-- 竞猜弹窗 -->
   <view class="guess-ibox" wx:if='{{isGuessShow}}'>
     <view class="close" catchtap='bindGuessLayer'></view>
@@ -177,4 +182,27 @@
       <view class="btn-2" catchtap='bindLuckState'>{{luckState ?'已开启':'已关闭'}}</view>
     </view>
   </view>
+
+  <!-- 设置弹窗 -->
+  <view class="set-ibox">
+    <view class="set-title">竞彩开始／关闭按钮</view>
+    <!-- 开启竞猜加类 begin-guess -->
+    <view class="set-btn-area begin-guess">
+      <view class="btn-bg">
+        <view class="set-ibox-btn">开启</view>
+      </view>
+    </view>
+    <view class="mid-title">竞彩结果设置</view>
+    <view class="set-choose">
+      <!-- 选中加类 active -->
+      <view class="choose active">
+        <view class="choose-1">A</view>
+      </view>
+      <view class="choose">
+        <view class="choose-2">B</view>
+      </view>
+    </view>
+    <view class="set-real-btn">确定</view>
+  </view>
+
 </view>

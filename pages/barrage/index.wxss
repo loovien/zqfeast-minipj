@@ -439,3 +439,105 @@ page .container{
 .guess-ibox-1 .guess-bottom .btn-2{
   color:#57a6ff;
 }
+
+.set-btn{
+  position:fixed;
+  z-index: 5;
+  bottom:740rpx;right:10rpx;
+  width:106rpx;height:140rpx;
+}
+.set-btn image{
+  display:block;
+  width:100%;height:100%;
+}
+
+.set-ibox{
+  display:none;
+  position:absolute;
+  top:50%;left:50%;
+  margin:-514rpx 0 0 -308rpx;
+  width:616rpx;height:1028rpx;
+  border:3rpx solid #1168b1;
+  background:rgba(3, 24, 67, .96);
+  z-index:11;
+}
+
+.set-ibox .set-title{
+  padding-top:26rpx;
+  height: 170rpx;line-height:170rpx;
+  font-size:38rpx;color:#fff;
+  text-align:center;
+}
+.set-ibox .set-btn-area{
+  height:210rpx;
+  margin-bottom:104rpx;
+  text-align:center;
+}
+.set-ibox .set-btn-area .btn-bg{
+  display:inline-block;
+  width:210rpx;height:210rpx;
+  border-radius:100%;
+  background:rgba(100, 119, 148, .4);
+  text-align:center;
+}
+.set-ibox .set-btn-area .btn-bg .set-ibox-btn{
+  display:inline-block;
+  width:170rpx;height:170rpx;
+  line-height:170rpx;
+  margin-top:20rpx;
+  border-radius:100%;
+  background:rgba(68, 101, 150, .72);
+  font-size:40rpx;color:#fff;
+}
+
+.set-ibox .begin-guess .btn-bg{
+  background:rgba(241, 0, 51, .4);
+}
+.set-ibox .begin-guess .btn-bg .set-ibox-btn{
+  background:rgba(243, 54, 95, 1);
+}
+
+.set-ibox .mid-title{
+  height:72rpx;line-height:72rpx;
+  font-size:38rpx;color:#fff;
+  text-align:center;
+}
+
+.set-ibox .set-choose{
+  margin-bottom:44rpx;
+  text-align:center;
+}
+.set-ibox .set-choose .choose{
+  position:relative;
+  display:inline-block;
+  margin:40rpx 64rpx;
+  width:130rpx;height:130rpx;
+  line-height:130rpx;
+  font-size:70rpx;color:#fff;
+  z-index:1;
+}
+.set-ibox .set-choose .choose .choose-1{
+  background:rgba(255, 91, 126, .3);
+  border-radius:100%;
+}
+.set-ibox .set-choose .choose .choose-2{
+  background:rgba(52, 146, 251, .3);
+  border-radius:100%;
+}
+
+.set-ibox .set-choose .active .choose-1{
+  background:#e7395e;
+}
+.set-ibox .set-choose .active .choose-2{
+  background:#3492fb;
+}
+
+.set-ibox .set-real-btn{
+  width:370rpx;height:86rpx;
+  line-height:86rpx;
+  margin:auto;
+  border:2rpx solid #616da2;
+  background:rgba(69, 103, 152, .3);
+  font-size:38rpx;color:#6c90c7;
+  text-align:center;
+}
