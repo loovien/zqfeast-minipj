@@ -26,9 +26,10 @@ Page({
     isSetGuessState: false,//设置竞猜状态
     isSetGuessBegin: false,//是否开启设置
     setGuessResult: '', //设置竞猜结果
-    chooseGuessResult: '',//选择竞猜结果1
+    chooseGuessResult: '',//选择竞猜结果
     isGuessLayerShow: false, //用户竞猜确认
     isBootom: false,//是否到底部
+    isBeginSuess:false,//竞猜活动是否开启
     hotList: [
       '战旗威武！',
       '小姐姐666~我为你打CALL',

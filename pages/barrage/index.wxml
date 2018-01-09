@@ -64,7 +64,7 @@
   <view class="guess-ibox" wx:if='{{isGuessShow}}'>
     <view class="close" catchtap='bindGuessLayer'></view>
     <!-- 没有开启加类 no-begin -->
-    <view class="guess-top no-begin1">
+    <view class="guess-top {{isBeginSuess?'':'no-begin'}}">
       <image src="img/guess-top.png" class="guess-top-bg" ></image>
       <view class="nothing-text">暂未开启该功能</view>
       <!-- 选中加类 active -->
@@ -137,7 +137,7 @@
 
   <!-- 设置弹窗 -->
   <view class="set-ibox" wx:if='{{isSetGuessState}}'>
-    <view class="close">
+    <view class="close" catchtap='bindSetGuess'>
       <image src="img/close.png"></image>
     </view>
     <view class="set-title">竞彩开始／关闭按钮</view>

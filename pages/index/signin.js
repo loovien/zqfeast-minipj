@@ -8,7 +8,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    END_TIME: parseInt(+new Date("2018/01/8,10:55:00")),//活动结束时间
+    END_TIME: parseInt(+new Date("2018/01/10,10:55:00")),//活动结束时间
     currentTime: '000000', //倒计时时间
     isBegin:false, //倒计时是否结束
     inputValue:[],//身份ID
