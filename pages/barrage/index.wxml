@@ -204,6 +204,8 @@
       </view>
     </view>
     <view class="set-real-btn" catchtap='bindSetGuess'>确定</view>
+    <!-- 激活以后加类 active-set-btn -->
+    <view class="set-real-btn active-set-btn">确　定</view>
   </view>
 
 </view>

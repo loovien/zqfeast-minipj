@@ -541,3 +541,8 @@ page .container{
   font-size:38rpx;color:#6c90c7;
   text-align:center;
 }
+.set-ibox .active-set-btn{
+  border-color:#3554d6;
+  background:-webkit-linear-gradient(top, #052177, #1439bc);
+  color:#fff;
+}
