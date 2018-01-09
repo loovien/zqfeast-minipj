@@ -202,7 +202,8 @@
         <view class="choose-2">B</view>
       </view>
     </view>
-    <view class="set-real-btn">确定</view>
+    <!-- 激活以后加类 active-set-btn -->
+    <view class="set-real-btn active-set-btn">确　定</view>
   </view>
 
 </view>
