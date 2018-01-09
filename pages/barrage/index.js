@@ -1,4 +1,5 @@
 let app = getApp();
+let a =1;
 Page({
 
   /**
@@ -7,60 +8,72 @@ Page({
   data: {
     isAdmin: true, //是否为管理员
     isVerify: true,//是否ID验证
-    danmakuList: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1], //弹幕列表
+    danmakuList: [], //弹幕列表
     isScroll: true,
+    userInfo: null,
+    giftNum:0, //奖励发放数量
     isProgramState: false, //节目列表弹窗状态
-    isWinning: false,
-    isLuckState:false, //弹幕抽奖设置
+    isWinning: false, //是否中奖
+    isLuckState: false, //弹幕抽奖设置
     isHot: false, //速弹展示状态
     isDisable: true, //发送按钮状态
-    isMore:0, //未读消息
-    userInfo: app.globalData.userInfo, //用户信息
+    isMore: 0, //未读消息
     danmakuContent: '', //弹幕内容
-    isGuessState:false, //竞猜弹窗状态
-    luckState:true, //是否开启弹幕抽奖
+    isGuessState: false, //竞猜弹窗状态
+    luckState: true, //是否开启弹幕抽奖
+    isConnect: true,//弹幕连接状态，
+    isError: false, //弹幕连接失败
+    isSetGuessState:false//设置竞猜状态
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    if (app.globalData.userInfo) {
+      this.setData({
+        userInfo: app.globalData.userInfo,
+      })
+    } else { //异步获取用户信息
+      app.userInfoReadyCallback = res => {
+        this.setData({
+          userInfo: res.userInfo,
+        })
+      }
+    }
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    console.log(app.globalData.userInfo)
+    setInterval(()=>{
+      this.bindSendDanmaku();
+      this.setData({
+        isMore: this.data.isMore + 1,
+      })
+    },100)
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    // setInterval(() => {
-    //   let list = this.data.danmakuList;
-    //   list.push(1);
-    //   this.setData({
-    //     danmakuList: list,
-    //   })
-    //   this.bindScroll();
+    setTimeout(() => {
+      this.setData({
+        isConnect: false,
+      })
+    }, 6000)
 
-    //   if (!this.data.isScroll) {
-    //     this.setData({
-    //       isMore:this.data.isMore+1
-    //     })
-    //     console.log(this.data.isMore);
-    //   }
-    // }, 1000)
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-
+    this.setData({
+      isConnect: true
+    })
   },
 
   /**
@@ -91,14 +104,14 @@ Page({
 
   },
 
-// ----------------------中奖提示---------------//
+  // ----------------------中奖提示---------------//
   bindWinningClose: function () { //弹框--关
     this.setData({
       isWinning: false,
     })
   },
 
-//-------------------弹幕----------------//
+  //-------------------弹幕----------------//
   bindHotShow: function () {//速弹--开/关
     this.setData({
       isHot: !this.data.isHot,
@@ -112,12 +125,13 @@ Page({
     })
   },
 
-  bindSendDanmaku: function () {   //发送弹幕
+  bindSendDanmaku: function () {  //发送弹幕
     let danmakuList = this.data.danmakuList;
     danmakuList.push(
       {
-        content: this.data.danmakuContent,
-        nickName: this.data.userInfo.nickName
+        content: a++,
+        nickName: this.data.userInfo.nickName,
+        isMyself:true
       }
     )
     this.setData({
@@ -127,21 +141,21 @@ Page({
 
   bindMoreMessage: function () {  //更多消息
     this.setData({
-      isMore:0,
-      isScroll:true
+      isMore: 0,
+      isScroll: true
     })
     this.bindScroll();
   },
 
   //---------------弹幕抽奖---------------//
-  bindLuckLayer:function(){ //设置弹窗--开/关
+  bindLuckLayer: function () { //设置弹窗--开/关
     this.setData({
       isLuckState: !this.data.isLuckState,
     })
   },
-  bindLuckState:function(){ //抽奖--开/关
+  bindLuckState: function () { //抽奖--开/关
     this.setData({
-      luckState : !this.data.luckState
+      luckState: !this.data.luckState
     })
   },
 
@@ -153,13 +167,18 @@ Page({
   },
 
   //---------------竞猜------------------//
-  bindGuessLayer:function(){ //弹窗--开/关
+  bindGuessLayer: function () { //弹窗--开/关
     this.setData({
       isGuessShow: !this.data.isGuessShow
     })
   },
+  bindSetGuess:function(){ //弹窗--开/关
+    this.setData({
+      isSetGuessState: !this.data.isSetGuessState
+    })
+  },
 
-//  ---------------------公用函数-------------
+  //  ---------------------公用函数-------------
   bindScroll: function () {  //滚动到最底部
     if (this.data.isScroll) {
       wx.pageScrollTo({
@@ -167,11 +186,26 @@ Page({
       })
     }
   },
-  
+
   bindTouchMove: function (e) { //静止滚动
+  console.log(e);
     this.setData({
       isScroll: false
     })
-    console.log(e.target.offsetTop);
   },
+
+  bindIsScroll:function(e){
+    this.setData({
+      isScroll: false,
+    })
+  },
+  // bindScrollBottom:function(e) { //滚到底部
+  //   clearTimeout(this.timerScroll);
+  // this.timerScroll = setTimeout(()=>{
+  //   this.setData({
+  //     isScroll: true,
+  //     isMore: 0,
+  //   })
+  // }, 300)
+  // }
 })

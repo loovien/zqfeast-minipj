@@ -1,20 +1,21 @@
 <view class="chat-content" bindtouchmove='bindTouchMove'>
   <image class="chat-bg" src="img/bg.jpg"></image>
-  <view class="container" scroll-y='{{isScroll}}'  scroll-into-view='last{{danmakuList.length}}'>
+  <scroll-view class="container" scroll-y   catchtouchend='bindIsScroll' 
+  scroll-into-view='{{isScroll ? "":1}}last{{danmakuList.length}}'>
     <view class="connect">
-      <view>正在连接弹幕服务器...</view>
-      <view>服务器开小差了，请退出该页面，重新进入再试一下，再试一下，请一定再试一下！</view>
+      <view wx:if="{{isConnect}}">正在连接弹幕服务器...</view>
+      <view wx:if="{{isError}}">服务器开小差了，请退出该页面，重新进入再试一下，再试一下，请一定再试一下！</view>
     </view>
-    <view class="welcome">欢迎<view class="name">琥珀川</view>进入<view class="color">【战旗直播年终狂欢】</view>请尽情的为战旗打CALL!更有丰富的弹幕礼物，等你来领！</view>
+    <view class="welcome" wx:if="{{!isConnect}}">欢迎<view class="name">{{userInfo.nickName}}</view>进入<view class="color">【战旗直播年终狂欢】</view>请尽情的为战旗打CALL!更有丰富的弹幕礼物，等你来领！</view>
     <!-- 聊天区域 -->
     <!--自己加 myself 类-->
-    <view class="chat-li" wx:key wx:for="{{danmakuList}}">
+    <view class="chat-li {{item.isMyself?'myself':''}}" wx:key wx:for="{{danmakuList}}">
       <view class="chat-li-cont">
-        <view class="name">张吗：</view>11111111111111
+        <view class="name">{{item.nickName}}：</view>{{item.content}}
       </view>
     </view>
     <view id='last{{danmakuList.length}}'></view>
-  </view>
+  </scroll-view>
   <!-- 激活速弹加类 active-fast -->
   <view class="chat-bottom {{isHot ? 'active-fast':''}}" wx:if="{{isVerify}}">
     <view class="chat-input-area">
@@ -38,7 +39,7 @@
       </ul>
     </view>
     <!--信息提示 -->
-    <view class="message-title" wx:if='{{isMore}}' catchtap='bindMoreMessage'>
+    <view class="message-title" wx:if='{{!isScroll}}' catchtap='bindMoreMessage'>
       <image src="img/dm-nums.png"></image>
       <view class="num">{{isMore}}</view>
     </view>
@@ -59,7 +60,7 @@
   </view>
 
   <!-- 设置按钮 -->
-  <view class="set-btn">
+  <view class="set-btn" catchtap='bindSetGuess'>
     <image src="img/set-btn.png" ></image>
   </view>
 
@@ -176,7 +177,7 @@
 
   <!-- 抽奖开启弹窗 -->
   <view class="luck-ibox" wx:if="{{isLuckState}}">
-    <view class="luck-top">目前发放奖励：<view class="num">56份</view></view>
+    <view class="luck-top">目前发放奖励：<view class="num">{{giftNum}}</view></view>
     <view class="luck-bottom">
       <view class="btn-1" catchtap='bindLuckLayer'>取消</view>
       <view class="btn-2" catchtap='bindLuckState'>{{luckState ?'已开启':'已关闭'}}</view>
@@ -184,7 +185,7 @@
   </view>
 
   <!-- 设置弹窗 -->
-  <view class="set-ibox">
+  <view class="set-ibox" wx:if='{{isSetGuessState}}'>
     <view class="set-title">竞彩开始／关闭按钮</view>
     <!-- 开启竞猜加类 begin-guess -->
     <view class="set-btn-area begin-guess">
@@ -202,7 +203,7 @@
         <view class="choose-2">B</view>
       </view>
     </view>
-    <view class="set-real-btn">确定</view>
+    <view class="set-real-btn" catchtap='bindSetGuess'>确定</view>
   </view>
 
 </view>

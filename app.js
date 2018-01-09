@@ -4,10 +4,6 @@ App({
         that.fetchUserInfo();
         // this.getSystemInfo();
     },
-    globalData: {
-      zafeast: {}, // 这里作为一个全局变量, 方便其它页面调用
-      userInfo: null
-    },
     fetchUserInfo: function(callback) {
         var that = this;
         if (that.globalData.userInfo) {
@@ -58,7 +54,12 @@ App({
         });
     },
 
+
     onError: function (msg) {
+    },
+    globalData: {
+      zafeast: {}, // 这里作为一个全局变量, 方便其它页面调用
+      userInfo: null
     },
     getSystemInfo:function(){
       wx.getSystemInfo({
