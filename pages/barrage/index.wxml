@@ -1,7 +1,7 @@
-<view class="chat-content" bindtouchmove='bindTouchMove'>
+<view class="chat-content">
   <image class="chat-bg" src="img/bg.jpg"></image>
   <scroll-view class="container" scroll-y   catchtouchend='bindIsScroll' 
-  scroll-into-view='{{isScroll ? "":1}}last{{danmakuList.length}}'>
+  scroll-into-view='{{isScroll ? "":"n"}}last{{danmakuList.length}}'>
     <view class="connect">
       <view wx:if="{{isConnect}}">正在连接弹幕服务器...</view>
       <view wx:if="{{isError}}">服务器开小差了，请退出该页面，重新进入再试一下，再试一下，请一定再试一下！</view>
@@ -19,9 +19,9 @@
   <!-- 激活速弹加类 active-fast -->
   <view class="chat-bottom {{isHot ? 'active-fast':''}}" wx:if="{{isVerify}}">
     <view class="chat-input-area">
-      <input class="input-area /" bindinput='bindKeyInput'></input>
+      <input class="input-area" value='{{danmakuContent}}' bindinput='bindKeyInput'></input>
       <!-- 不能发送加类 disable -->
-      <view class="send {{isDisable?'disable':''}}" catchtap='bindSendDanmaku'>
+      <view class="send {{danmakuContent.length>0?'':'disable'}}" catchtap='bindSendDanmaku'>
         <image src="img/send.png"></image>
       </view>
       <view class="fast" catchtap='bindHotShow'>
@@ -31,11 +31,7 @@
     <!-- 速弹弹窗 -->
     <view class="fast-ibox">
       <ul>
-        <li>战旗威武</li>
-        <li>战旗威武</li>
-        <li>战旗威武</li>
-        <li>战旗威武</li>
-        <li>战旗威武</li>
+        <li wx:key wx:for="{{hotList}}" catchtap='bindHotSend' data-index='{{index}}'>{{item}}</li>
       </ul>
     </view>
     <!--信息提示 -->
@@ -72,10 +68,10 @@
       <image src="img/guess-top.png" class="guess-top-bg" ></image>
       <view class="nothing-text">暂未开启该功能</view>
       <!-- 选中加类 active -->
-      <view class="choose active">
+      <view class="choose {{chooseGuessResult==='A'?'active':''}}" data-id='A' catchtap='bindChooseResult'>
         <view class="choose-1">A</view>
       </view>
-      <view class="choose">
+      <view class="choose {{chooseGuessResult==='B'?'active':''}}" data-id='B' catchtap='bindChooseResult'>
         <view class="choose-2">B</view>
       </view>
     </view>
@@ -91,59 +87,14 @@
       </view>
       <view class="guess-tbody">
         <view class="nothing-text">暂无排名</view>
-        <view class="tr">
+        <view class="tr" wx:for='11111'>
           <view class="li li-1">1</view>
           <view class="li li-2">旅客发送了</view>
           <view class="li li-3">30</view>
         </view>
-        <view class="tr">
-          <view class="li li-1">2</view>
-          <view class="li li-2">旅客发送了</view>
-          <view class="li li-3">20</view>
-        </view>
-        <view class="tr">
-          <view class="li li-1">3</view>
-          <view class="li li-2">旅客发送了</view>
-          <view class="li li-3">20</view>
-        </view>
-        <view class="tr">
-          <view class="li li-1">4</view>
-          <view class="li li-2">旅客发送了</view>
-          <view class="li li-3">20</view>
-        </view>
-        <view class="tr">
-          <view class="li li-1">5</view>
-          <view class="li li-2">旅客发送了</view>
-          <view class="li li-3">20</view>
-        </view>
-        <view class="tr">
-          <view class="li li-1">6</view>
-          <view class="li li-2">旅客发送了</view>
-          <view class="li li-3">20</view>
-        </view>
-        <view class="tr">
-          <view class="li li-1">7</view>
-          <view class="li li-2">旅客发送了</view>
-          <view class="li li-3">20</view>
-        </view>
-        <view class="tr">
-          <view class="li li-1">8</view>
-          <view class="li li-2">旅客发送了</view>
-          <view class="li li-3">20</view>
-        </view>
-        <view class="tr">
-          <view class="li li-1">9</view>
-          <view class="li li-2">旅客发送了</view>
-          <view class="li li-3">20</view>
-        </view>
-        <view class="tr">
-          <view class="li li-1">10</view>
-          <view class="li li-2">旅客发送了</view>
-          <view class="li li-3">20</view>
-        </view>
         <view class="tr myself">
           <view class="li li-1">145</view>
-          <view class="li li-2">旅客发送了</view>
+          <view class="li li-2">{{userInfo.nickName}}</view>
           <view class="li li-3">20</view>
         </view>
       </view>
@@ -151,12 +102,12 @@
   </view>
 
   <!-- 竞猜确认弹窗 -->
-  <view class="guess-ibox-1" wx:if='{{isLayerShow}}'>
+  <view class="guess-ibox-1" wx:if='{{isGuessLayerShow}}'>
     <image src="img/guess-box-1.png" class="guess-bg-1" ></image>
     <view class="guess-top">请确认你的选择</view>
     <view class="guess-bottom">
-      <view class="btn-1">取消</view>
-      <view class="btn-2">确认</view>
+      <view class="btn-1" catchtap='bindACancelResult'>取消</view>
+      <view class="btn-2" catchtap='bindAffirmResult'>确认</view>
     </view>
   </view>
 
@@ -188,24 +139,23 @@
   <view class="set-ibox" wx:if='{{isSetGuessState}}'>
     <view class="set-title">竞彩开始／关闭按钮</view>
     <!-- 开启竞猜加类 begin-guess -->
-    <view class="set-btn-area begin-guess">
+    <view class="set-btn-area {{isSetGuessBegin?'begin-guess':''}}" catchtap='bindSetGuessBegin'>
       <view class="btn-bg">
-        <view class="set-ibox-btn">开启</view>
+        <view class="set-ibox-btn">{{isSetGuessBegin?'关闭':'开启'}}</view>
       </view>
     </view>
     <view class="mid-title">竞彩结果设置</view>
     <view class="set-choose">
       <!-- 选中加类 active -->
-      <view class="choose active">
+      <view class="choose {{setGuessResult==='A'?'active':''}}" data-id='A' catchtap='bindChooseGuess'>
         <view class="choose-1">A</view>
       </view>
-      <view class="choose">
+      <view class="choose {{setGuessResult==='B'?'active':''}}" data-id='B' catchtap='bindChooseGuess'>
         <view class="choose-2">B</view>
       </view>
     </view>
-    <view class="set-real-btn" catchtap='bindSetGuess'>确定</view>
     <!-- 激活以后加类 active-set-btn -->
-    <view class="set-real-btn active-set-btn">确　定</view>
+    <view class="set-real-btn active-set-btn"  catchtap='bindSetGuess'>确　定</view>
   </view>
 
 </view>
