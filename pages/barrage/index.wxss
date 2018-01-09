@@ -461,6 +461,15 @@ page .container{
   background:rgba(3, 24, 67, .96);
   z-index:11;
 }
+.set-ibox .close{
+  position:absolute;
+  top:20rpx;right:20rpx;
+  width:30rpx;height:30rpx;
+}
+.set-ibox .close image{
+  display:block;
+  width:100%;height:100%;
+}
 
 .set-ibox .set-title{
   padding-top:26rpx;

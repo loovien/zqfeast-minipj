@@ -48,3 +48,11 @@
     </view>
   </view>
 </view>
+
+<!-- 确定弹窗 -->
+<view class="index-real-ibox">
+  <image src="img/real-ibox-bg.png"></image>
+  <view class="ibox-title">2 2 2 2 2 2</view>
+  <view class="btn-1"></view>
+  <view class="btn-2"></view>
+</view>
