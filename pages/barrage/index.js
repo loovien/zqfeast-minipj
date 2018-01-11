@@ -14,17 +14,17 @@ let strategyTypes = { //协议集合
     }
   },
   "guess.go": function () {//开启竞猜
-    this.guessTimer = setTimeout(()=>{
-       this.setData({
-         isGuessShow: true,
-         isBeginSuess:true,
-       })
-     },3000)
+    this.guessTimer = setTimeout(() => {
+      this.setData({
+        isGuessShow: true,
+        isBeginSuess: true,
+      })
+    }, 3000)
   },
   "guess.bye": function () {//关闭竞猜
     this.setData({
       isGuessShow: false,
-      isBeginSuess:false,
+      isBeginSuess: false,
     })
   },
   "kick": function (data) {
@@ -38,11 +38,11 @@ Page({
    * 页面的初始数据
    */
   data: {
-    isAdmin: true, //是否为管理员
-    isVerify: true,//是否ID验证
+    isAdmin: false, //是否为管理员
+    isVerify: false,//是否ID验证
     danmakuList: [], //弹幕列表
     isScroll: true,
-    hasChoosed:-1,//-1未操作
+    hasChoosed: -1,//-1未操作
     userInfo: null,
     guessTop: false, //竞猜积分榜
     uid: null,//用户绑定ID
@@ -53,8 +53,8 @@ Page({
     isHot: false, //速弹展示状态
     isDisable: true, //发送按钮状态
     isMore: 0, //未读消息
-    topList:[],//其他积分榜
-    myselfList:{},//自己积分榜
+    topList: [],//其他积分榜
+    myselfList: {},//自己积分榜
     danmakuContent: '', //弹幕内容
     isGuessState: false, //竞猜弹窗状态
     luckState: true, //是否开启弹幕抽奖
@@ -81,24 +81,27 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.setData({
-      uid: app.globalData.info[0].uid,
-      userInfo: app.globalData.userInfo,
-      isAdmin: app.globalData.info[0].is_admin,
-    })
-    // console.log(this.data.uid);
-    // app.fetchUserInfo().then(res=>{
-    //   console.log(res);
-    //   // this.setData({
-    //   //   userInfo: ,
-    //   // })
-    // })
-   
 
-    // setInterval(()=>{
-    //   a++;
-    //   this.sendSocketMessage('测试'+ a);
-    // },5000)
+    if (app.globalData.info) {
+      this.setData({
+        uid: app.globalData.info[0].uid,
+        userInfo: app.globalData.userInfo,
+        isAdmin: app.globalData.info[0].is_admin,
+      })
+    } else { //异步获取用户信息
+      app.userInfoReadyCallback = res => {
+        this.setData({
+          uid: app.globalData.info[0].uid,
+          userInfo: app.globalData.userInfo,
+          isAdmin: app.globalData.info[0].is_admin,
+        })
+      }
+
+      // setInterval(()=>{
+      //   a++;
+      //   this.sendSocketMessage('测试'+ a);
+      // },5000)
+    }
   },
 
   /**
@@ -128,7 +131,7 @@ Page({
    */
   onHide: function () {
     this.setData({
-      danmakuList:[]
+      danmakuList: []
     })
   },
 
@@ -251,13 +254,17 @@ Page({
     this.setData({
       isGuessShow: !this.data.isGuessShow
     })
-
+    this.fetchGuessInfo();
   },
-  bindSetGuess: function () { //设置弹窗--开/关
+  bindSetGuess: function (e) { //设置弹窗--开/关
+    let flag = e.currentTarget.dataset.id;
     this.setData({
       isSetGuessState: !this.data.isSetGuessState
     })
-    this.fetchGuessInfo();
+
+    if (flag === "ajax") { //带有ajax标签才会发起请求
+      this.fetchGuessInfo();
+    }
   },
   bindSetGuessAffirm: function () { //确认竞猜
     this.fetchGuessFlag();
@@ -269,9 +276,9 @@ Page({
     this.setData({
       isSetGuessBegin: !this.data.isSetGuessBegin
     })
-    if (this.data.isSetGuessBegin=== true) {
+    if (this.data.isSetGuessBegin === true) {
       this.setData({
-        setGuessResult:''
+        setGuessResult: ''
       })
     }
   },
@@ -284,7 +291,7 @@ Page({
   },
 
   bindChooseResult: function (e) {//用户竞猜选择
-    if(this.data.hasChoosed > 0) {
+    if (this.data.hasChoosed > 0) {
       return;
     }
     let result = e.currentTarget.dataset.id;
@@ -350,7 +357,7 @@ Page({
             isSetGuessBegin: res.data.data.status,
             hasChoosed: res.data.data.u.choice,
           })
-        } else{ //失败
+        } else { //失败
           _this.setData({
             isBeginSuess: false,
             chooseGuessResult: '',
@@ -359,17 +366,17 @@ Page({
         }
       })
 
-      function _stringToNumber(data){
-        let choice;
-        if (data.choice === 0) {
-          choice = "A"
-        } else if (data.choice === 1) {
-          choice = "B"
-        } else{ //没选择
-          choice = ""
-        }
-        return choice;
+    function _stringToNumber(data) {
+      let choice;
+      if (data.choice === 0) {
+        choice = "A"
+      } else if (data.choice === 1) {
+        choice = "B"
+      } else { //没选择
+        choice = ""
       }
+      return choice;
+    }
   },
 
   fetchGuessTop: function () { //获取竞猜积分榜
@@ -381,8 +388,8 @@ Page({
         if (data.code === 0) {
           _this.setData({
             guessTop: data.data.list,
-            topList:data.data.list,
-            myselfList:data.data.u,
+            topList: data.data.list,
+            myselfList: data.data.u,
           })
         }
       })
@@ -440,9 +447,9 @@ Page({
     }
     apis.fetch(apis.API.ADMIN_GUESS_FLAG, data, 'POST')
       .then(res => {
-        if(res.data.code === 0) {
+        if (res.data.code === 0) {
           _this.setData({
-            
+
           })
         }
       })
@@ -497,8 +504,8 @@ Page({
   calcStrategyTypes: function (type, data) { //下发协议计算
     strategyTypes[type].call(this, data);
   },
-  
-  alertLayer:function(msg){
+
+  alertLayer: function (msg) {
     wx.showToast({
       title: msg,
       duration: 2000
