@@ -9,7 +9,8 @@
         <view class="yz-text">验证失败，请重新输入</view>
       </view>
       <image class="main-number" src="img/input.png"></image>
-      <input class="num-input" type='number' confirm-type='done'  maxlength="6" bindinput='bindKeyInput' focus="{{focus}}" />
+      <input class="num-input" type='number' confirm-type='done'  maxlength="6" bindinput='bindKeyInput' 
+      focus="{{focus && !isVerify}}" />
       <view class='number' bindtap="bindButtonTap">
         <text class="text text-1">{{inputValue[0]}}</text>
         <text class="text text-2">{{inputValue[1]}}</text>
@@ -26,7 +27,7 @@
       <view class="btn" bindtap="bindViewDanmaku">
         <image class="btn-1" src="img/btn-2.png"></image>
       </view>
-      <view class="btn2" bindtap="bindViewDanmaku">
+      <view class="btn2">
         <image class="btn-2" src="img/btn-3.png"></image>
       </view>
       <view class="title">您也可以直接不输入身份ID直接进入，但不能参与弹幕互动哟</view>
@@ -50,9 +51,9 @@
 </view>
 
 <!-- 确定弹窗 -->
-<view class="index-real-ibox">
+<view class="index-real-ibox" wx:if='{{verifyLayer}}'>
   <image src="img/real-ibox-bg.png"></image>
-  <view class="ibox-title">2 2 2 2 2 2</view>
-  <view class="btn-1"></view>
-  <view class="btn-2"></view>
+  <view class="ibox-title">{{inputValue}}</view>
+  <view class="btn-1" catchtap='bindVerifyOk'></view>
+  <view class="btn-2" catchtap='bindcVerifyCancel'></view>
 </view>

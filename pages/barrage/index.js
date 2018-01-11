@@ -1,4 +1,36 @@
 let app = getApp();
+let apis = require("../../API/api.js");
+
+let strategyTypes = { //协议集合
+  "common": function (data) { //弹幕列表
+    this.pushDanmakuList(data);
+    console.log(data);
+  },
+  "luck": function (data) { //中奖
+    if (data.token == this.data.uid) { //token值等于UID值中奖
+      this.setData({
+        isWinning: true
+      })
+    }
+  },
+  "guess.go": function () {//开启竞猜
+    this.guessTimer = setTimeout(()=>{
+       this.setData({
+         isGuessShow: true,
+         isBeginSuess:true,
+       })
+     },3000)
+  },
+  "guess.bye": function () {//关闭竞猜
+    this.setData({
+      isGuessShow: false,
+      isBeginSuess:false,
+    })
+  },
+  "kick": function (data) {
+    this.pushDanmakuList(data);
+  }
+}
 
 Page({
 
@@ -10,7 +42,10 @@ Page({
     isVerify: true,//是否ID验证
     danmakuList: [], //弹幕列表
     isScroll: true,
+    hasChoosed:-1,//-1未操作
     userInfo: null,
+    guessTop: false, //竞猜积分榜
+    uid: null,//用户绑定ID
     giftNum: 0, //奖励发放数量
     isProgramState: false, //节目列表弹窗状态
     isWinning: false, //是否中奖
@@ -18,10 +53,12 @@ Page({
     isHot: false, //速弹展示状态
     isDisable: true, //发送按钮状态
     isMore: 0, //未读消息
+    topList:[],//其他积分榜
+    myselfList:{},//自己积分榜
     danmakuContent: '', //弹幕内容
     isGuessState: false, //竞猜弹窗状态
     luckState: true, //是否开启弹幕抽奖
-    isConnect: true,//弹幕连接状态，
+    isConnect: false,//弹幕连接状态，
     isError: false, //弹幕连接失败
     isSetGuessState: false,//设置竞猜状态
     isSetGuessBegin: false,//是否开启设置
@@ -29,31 +66,39 @@ Page({
     chooseGuessResult: '',//选择竞猜结果
     isGuessLayerShow: false, //用户竞猜确认
     isBootom: false,//是否到底部
-    isBeginSuess:false,//竞猜活动是否开启
-    hotList: [
+    isBeginSuess: false,//竞猜活动是否开启
+    hotList: [ //速弹列表
       '战旗威武！',
       '小姐姐666~我为你打CALL',
       '帅帅帅帅帅帅！',
       '下一个奖是我的',
       '这个节目是今晚最棒的！',
-      '100把大宝剑送给你']
+      '100把大宝剑送给你'],
+    msg: { "type": "common", "txt": "", "token": "", color: "#fff" },//弹幕默认模板
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    if (app.globalData.userInfo) {
-      this.setData({
-        userInfo: app.globalData.userInfo,
-      })
-    } else { //异步获取用户信息
-      app.userInfoReadyCallback = res => {
-        this.setData({
-          userInfo: res.userInfo,
-        })
-      }
-    }
+    this.setData({
+      uid: app.globalData.info[0].uid,
+      userInfo: app.globalData.userInfo,
+      isAdmin: app.globalData.info[0].is_admin,
+    })
+    // console.log(this.data.uid);
+    // app.fetchUserInfo().then(res=>{
+    //   console.log(res);
+    //   // this.setData({
+    //   //   userInfo: ,
+    //   // })
+    // })
+   
+
+    // setInterval(()=>{
+    //   a++;
+    //   this.sendSocketMessage('测试'+ a);
+    // },5000)
   },
 
   /**
@@ -66,26 +111,24 @@ Page({
     //     isMore: this.data.isMore + 1,
     //   })
     // },3000)
+    this.fetchGuessInfo();
+    this.fetchGuessTop();
+    this.fetchLuckyNumber();
+    this.fetchLotteryInfo();
+
+    this.socketFunction();
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
-    setTimeout(() => {
-      this.setData({
-        isConnect: false,
-      })
-    }, 6000)
-
-  },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
     this.setData({
-      isConnect: true
+      danmakuList:[]
     })
   },
 
@@ -142,12 +185,14 @@ Page({
     if (this.data.danmakuContent.length <= 0) { //内容为空
       return;
     }
-    this._pushDanmakuList(this.data.danmakuContent);
+
+    this.sendSocketMessage(this.data.danmakuContent);
   },
 
   bindHotSend: function (e) { //快速弹幕发送
     let index = e.currentTarget.dataset.index;
-    this._pushDanmakuList(this.data.hotList[index]);
+    let content = this.data.hotList[index];
+    this.sendSocketMessage(content);
     this.setData({
       isHot: !this.data.isHot,
     })
@@ -161,35 +206,39 @@ Page({
     this.bindScroll();
   },
 
+  //---------------弹幕抽奖---------------//
+  bindLuckLayer: function () { //设置弹窗--开
+    this.setData({
+      isLuckState: !this.data.isLuckState,
+    })
+    this.fetchLuckyNumber();
+    this.fetchLotteryInfo();
+  },
+
+  bindLuckLayerCancel: function () { //设置弹窗--关
+    this.setData({
+      isLuckState: !this.data.isLuckState,
+    })
+  },
+
+  bindLuckState: function () {//弹幕抽奖-开/关
+    this.setData({
+      luckState: !this.data.luckState,
+    })
+    this.fetchLotteryFlag(this.data.luckState);
+    this.bindLuckLayerCancel();
+  },
+
   // private
-  _pushDanmakuList: function (text) { //弹幕内容添加
+  pushDanmakuList: function (list) { //弹幕内容添加
     let danmakuList = this.data.danmakuList;
-    danmakuList.push(
-      {
-        content: text,
-        nickName: this.data.userInfo.nickName,
-        isMyself: true
-      }
-    )
+    danmakuList.push(list)
     this.setData({
       danmakuList: danmakuList,
       danmakuContent: '',
     })
     this.bindScroll();
   },
-
-  //---------------弹幕抽奖---------------//
-  bindLuckLayer: function () { //设置弹窗--开/关
-    this.setData({
-      isLuckState: !this.data.isLuckState,
-    })
-  },
-  bindLuckState: function () { //抽奖--开/关
-    this.setData({
-      luckState: !this.data.luckState
-    })
-  },
-
   //---------------节目单------------------//
   bindProgramLayer: function () { //弹窗--开/关
     this.setData({
@@ -202,16 +251,29 @@ Page({
     this.setData({
       isGuessShow: !this.data.isGuessShow
     })
+
   },
-  bindSetGuess: function () { //弹窗--开/关
+  bindSetGuess: function () { //设置弹窗--开/关
     this.setData({
       isSetGuessState: !this.data.isSetGuessState
+    })
+    this.fetchGuessInfo();
+  },
+  bindSetGuessAffirm: function () { //确认竞猜
+    this.fetchGuessFlag();
+    this.setData({
+      isSetGuessState: false
     })
   },
   bindSetGuessBegin: function () { //设置竞猜
     this.setData({
       isSetGuessBegin: !this.data.isSetGuessBegin
     })
+    if (this.data.isSetGuessBegin=== true) {
+      this.setData({
+        setGuessResult:''
+      })
+    }
   },
 
   bindChooseGuess: function (e) { //管理员竞猜结果设置
@@ -222,6 +284,9 @@ Page({
   },
 
   bindChooseResult: function (e) {//用户竞猜选择
+    if(this.data.hasChoosed > 0) {
+      return;
+    }
     let result = e.currentTarget.dataset.id;
     this.setData({
       chooseGuessResult: result,
@@ -229,7 +294,17 @@ Page({
     })
   },
 
-  bindAffirmResult: function () { //用户确认选择
+  bindAffirmResult: function () { //用户提交竞猜
+    let data = { uid: this.data.uid, choice: this.data.chooseGuessResult }
+    if (data.choice === 'A') {
+      data.choice = 0
+    } else if (data.choice === 'B') {
+      data.choice = 1
+    }
+    apis.fetch(apis.API.GUESS_CHOICE, data, "POST")
+      .then(res => {
+        console.log(res);
+      })
     this.setData({
       isGuessLayerShow: false,
       isGuessShow: false,
@@ -238,6 +313,7 @@ Page({
   bindACancelResult: function () { //用户取消选择
     this.setData({
       isGuessLayerShow: false,
+      chooseGuessResult: '' //取消重置选择
     })
   },
 
@@ -255,10 +331,177 @@ Page({
       isScroll: false,
     })
   },
-  
+
   bindScrollBottom: function (e) { //滚到底部
     this.setData({
       isBootom: true,
+    })
+  },
+
+  fetchGuessInfo: function () { //获取竞猜状态
+    let _this = this;
+    let data = { uid: this.data.uid };
+    apis.fetch(apis.API.GUESS_INFO, data)
+      .then(res => {
+        if (res.data.code === 0) { //成功
+          _this.setData({
+            isBeginSuess: res.data.data.status,
+            chooseGuessResult: _stringToNumber(res.data.data.u),
+            isSetGuessBegin: res.data.data.status,
+            hasChoosed: res.data.data.u.choice,
+          })
+        } else{ //失败
+          _this.setData({
+            isBeginSuess: false,
+            chooseGuessResult: '',
+            isSetGuessBegin: false,
+          })
+        }
+      })
+
+      function _stringToNumber(data){
+        let choice;
+        if (data.choice === 0) {
+          choice = "A"
+        } else if (data.choice === 1) {
+          choice = "B"
+        } else{ //没选择
+          choice = ""
+        }
+        return choice;
+      }
+  },
+
+  fetchGuessTop: function () { //获取竞猜积分榜
+    let _this = this;
+    apis.fetch(apis.API.GUESS_TOP, { uid: this.data.uid })
+      .then(res => {
+        let data = res.data;
+        console.log(data);
+        if (data.code === 0) {
+          _this.setData({
+            guessTop: data.data.list,
+            topList:data.data.list,
+            myselfList:data.data.u,
+          })
+        }
+      })
+  },
+
+  fetchLuckyNumber: function () { //中奖数量
+    let _this = this;
+    apis.fetch(apis.API.ADMIN_LUCKY_NUM, { uid: this.data.uid }, "POST")
+      .then(res => {
+        console.log(res);
+        if (res.data.code === 0) {
+          _this.setData({
+            giftNum: res.data.data.num,
+          })
+        }
+      })
+  },
+
+  fetchLotteryInfo: function () { //获取设置弹幕抽奖状态
+    let _this = this;
+    apis.fetch(apis.API.ADMIN_LOTTERY_INFO, { uid: this.data.uid })
+      .then(res => {
+        let data = res.data;
+        if (res.data.code === 0) {
+          _this.setData({
+            luckState: res.data.data.status,
+          })
+        }
+      }
+      )
+  },
+
+  fetchLotteryFlag: function (type) {//设置弹幕抽奖开/关
+    let data = { uid: this.data.uid };
+    if (type === false) {
+      data.status = 0;
+    } else if (type === true) {
+      data.status = 1;
+    }
+    apis.fetch(apis.API.ADMIN_LOTTERY_FLAG, data, 'POST')
+      .then(res => {
+        console.log(res);
+      })
+  },
+
+  fetchGuessFlag: function () { //竞彩-开/关
+    let result = this.data.setGuessResult;
+    let swich = Number(this.data.isSetGuessBegin);
+    let data = { uid: this.data.uid, status: swich };
+    let _this = this;
+    if (result === "A") {
+      data.answer = 0;
+    } else if (result === 'B') {
+      data.answer = 1;
+    }
+    apis.fetch(apis.API.ADMIN_GUESS_FLAG, data, 'POST')
+      .then(res => {
+        if(res.data.code === 0) {
+          _this.setData({
+            
+          })
+        }
+      })
+  },
+
+  socketFunction: function () { //socket连接
+    let _this = this;
+    //建立连接
+    wx.connectSocket({
+      url: apis.API.WSS,
+    })
+
+    //连接成功
+    wx.onSocketOpen(function (res) {
+      console.log('----------------------连接成功------------------')
+      _this.setData({
+        // isConnect: false,
+        isError: false,
+      })
+    });
+
+    //接收数据
+    wx.onSocketMessage(function (res) {
+      console.log('---------------------接收数据------------------')
+      console.log(res);
+      let data = JSON.parse(res.data);
+      _this.calcStrategyTypes(data.type, data);
+    });
+    //连接失败
+    wx.onSocketError(function () {
+      console.log('websocket连接失败！');
+      _this.setData({
+        isError: true,
+        isConnect: false,
+      })
+    })
+  },
+
+  sendSocketMessage: function (content) { //socket发送消息
+    let msg = this.data.msg;
+    msg.txt = content;
+    msg.token = this.data.uid;
+    wx.sendSocketMessage({
+      data: JSON.stringify(msg),
+    })
+  },
+
+  closeSocket: function () { //关闭socket
+
+  },
+
+  calcStrategyTypes: function (type, data) { //下发协议计算
+    strategyTypes[type].call(this, data);
+  },
+  
+  alertLayer:function(msg){
+    wx.showToast({
+      title: msg,
+      duration: 2000
     })
   }
 })
