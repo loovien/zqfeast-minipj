@@ -156,7 +156,7 @@ Page({
     let data = Object.assign({}, userInfo,
       { uid: this.data.inputValue }, { openid: this.data.info[0].openid })
     console.log(data);
-    apis.fetch(apis.API.USER_INFO, data)
+    apis.fetch(apis.API.USER_INFO, data,"POST")
       .then(res => {
         _this.setData({
           verifyLayer:false,//隐藏提示
