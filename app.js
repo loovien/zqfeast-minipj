@@ -2,8 +2,8 @@ App({
     onLaunch: function () {
         var that = this;
         that.fetchUserInfo();
+        // this.getSystemInfo();
     },
-
     fetchUserInfo: function(callback) {
         var that = this;
         if (that.globalData.userInfo) {
@@ -54,11 +54,24 @@ App({
         });
     },
 
+
     onError: function (msg) {
     },
-
     globalData: {
-        zafeast: {}, // 这里作为一个全局变量, 方便其它页面调用
-        userInfo: null
+      zafeast: {}, // 这里作为一个全局变量, 方便其它页面调用
+      userInfo: null
+    },
+    getSystemInfo:function(){
+      wx.getSystemInfo({
+        success: function (res) {
+          console.log(res.model)
+          console.log(res.pixelRatio)
+          console.log(res.windowWidth)
+          console.log(res.windowHeight)
+          console.log(res.language)
+          console.log(res.version)
+          console.log(res.platform)
+        }
+      })
     }
 })

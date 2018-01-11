@@ -1,9 +1,164 @@
-<view class="container">
-  <view class="connect">
-    <view>正在连接弹幕服务器...</view>
-    <view>服务器开小差了，请退出该页面，重新进入再试一下，再试一下，请一定再试一下。</view>
+<view class="chat-content">
+  <image class="chat-bg" src="img/bg.jpg"></image>
+  <scroll-view class="container" scroll-y   catchtouchend='bindIsScroll' 
+  scroll-into-view='{{isScroll ? "":"n"}}last{{danmakuList.length}}'>
+    <view class="connect">
+      <view wx:if="{{isConnect}}">正在连接弹幕服务器...</view>
+      <view wx:if="{{isError}}">服务器开小差了，请退出该页面，重新进入再试一下，再试一下，请一定再试一下！</view>
+    </view>
+    <view class="welcome" wx:if="{{!isConnect}}">欢迎<view class="name">{{userInfo.nickName}}</view>进入<view class="color">【战旗直播年终狂欢】</view>请尽情的为战旗打CALL!更有丰富的弹幕礼物，等你来领！</view>
+    <!-- 聊天区域 -->
+    <!--自己加 myself 类-->
+    <view class="chat-li {{item.isMyself?'myself':''}}" wx:key wx:for="{{danmakuList}}">
+      <view class="chat-li-cont">
+        <view class="name">{{item.nickName}}：</view>{{item.content}}
+      </view>
+    </view>
+    <view id='last{{danmakuList.length}}'></view>
+  </scroll-view>
+  <!-- 激活速弹加类 active-fast -->
+  <view class="chat-bottom {{isHot ? 'active-fast':''}}" wx:if="{{isVerify}}">
+    <view class="chat-input-area">
+      <input class="input-area" value='{{danmakuContent}}' bindinput='bindKeyInput'></input>
+      <!-- 不能发送加类 disable -->
+      <view class="send {{danmakuContent.length>0?'':'disable'}}" catchtap='bindSendDanmaku'>
+        <image src="img/send.png"></image>
+      </view>
+      <view class="fast" catchtap='bindHotShow'>
+        <image src="img/fast.png"></image>
+      </view>
+    </view>
+    <!-- 速弹弹窗 -->
+    <view class="fast-ibox">
+      <ul>
+        <li wx:key wx:for="{{hotList}}" catchtap='bindHotSend' data-index='{{index}}'>{{item}}</li>
+      </ul>
+    </view>
+    <!--信息提示 -->
+    <view class="message-title" wx:if='{{!isScroll}}' catchtap='bindMoreMessage'>
+      <image src="img/dm-nums.png"></image>
+      <view class="num">{{isMore}}</view>
+    </view>
   </view>
-  <view class="welcome">欢迎<view class="name">琥珀川</view>进入<view class="color">【战旗直播年终狂欢】</view>请尽情的为战旗打CALL!更有丰富的弹幕礼物，等你来领</view>
+  <!-- 节目单 -->
+  <view class="program-btn" bindtap='bindProgramLayer'>
+    <image src="img/program-btn.png" ></image>
+  </view>
 
+  <!-- 抽奖开启按钮 -->
+  <view class="luck-btn" wx:if="{{isAdmin}}" catchtap='bindLuckLayer'>
+    <image src="img/luck-btn.png" ></image>
+  </view>
+
+  <!-- 竞猜按钮 -->
+  <view class="guess-btn" catchtap='bindGuessLayer'>
+    <image src="img/guess-btn.png" ></image>
+  </view>
+
+  <!-- 设置按钮 -->
+  <view class="set-btn" catchtap='bindSetGuess'>
+    <image src="img/set-btn.png" ></image>
+  </view>
+
+  <!-- 竞猜弹窗 -->
+  <view class="guess-ibox" wx:if='{{isGuessShow}}'>
+    <view class="close" catchtap='bindGuessLayer'></view>
+    <!-- 没有开启加类 no-begin -->
+    <view class="guess-top {{isBeginSuess?'':'no-begin'}}">
+      <image src="img/guess-top.png" class="guess-top-bg" ></image>
+      <view class="nothing-text">暂未开启该功能</view>
+      <!-- 选中加类 active -->
+      <view class="choose {{chooseGuessResult==='A'?'active':''}}" data-id='A' catchtap='bindChooseResult'>
+        <view class="choose-1">A</view>
+      </view>
+      <view class="choose {{chooseGuessResult==='B'?'active':''}}" data-id='B' catchtap='bindChooseResult'>
+        <view class="choose-2">B</view>
+      </view>
+    </view>
+    <!-- 没有开启加类 no-begin -->
+    <view class="guess-bottom no-begin1">
+      <image src="img/guess-bottom.png" class="guess-bottom-bg" ></image>
+      <view class="guess-thead">
+        <ul>
+          <li class="li-1">名次</li>
+          <li class="li-2">昵称</li>
+          <li class="li-3">积分</li>
+        </ul>
+      </view>
+      <view class="guess-tbody">
+        <view class="nothing-text">暂无排名</view>
+        <view class="tr" wx:for='11111'>
+          <view class="li li-1">1</view>
+          <view class="li li-2">旅客发送了</view>
+          <view class="li li-3">30</view>
+        </view>
+        <view class="tr myself">
+          <view class="li li-1">145</view>
+          <view class="li li-2">{{userInfo.nickName}}</view>
+          <view class="li li-3">20</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 竞猜确认弹窗 -->
+  <view class="guess-ibox-1" wx:if='{{isGuessLayerShow}}'>
+    <image src="img/guess-box-1.png" class="guess-bg-1" ></image>
+    <view class="guess-top">请确认你的选择</view>
+    <view class="guess-bottom">
+      <view class="btn-1" catchtap='bindACancelResult'>取消</view>
+      <view class="btn-2" catchtap='bindAffirmResult'>确认</view>
+    </view>
+  </view>
+
+  <!-- 遮罩 -->
+  <view class="mask"></view>
+
+  <!-- 节目单列表弹窗 -->
+  <view class="program-ibox" wx:if="{{isProgramState}}">
+    <view class="close" catchtap='bindProgramLayer'></view>
+    <image src="img/program-bg.png"></image>
+  </view>
+
+  <!-- 中奖弹窗 -->
+  <view class="winning-ibox" wx:if="{{isWinning}}">
+    <image src="img/winning-bg.png"></image>
+    <view class="close" catchtap='bindWinningClose'></view>
+  </view>
+
+  <!-- 抽奖开启弹窗 -->
+  <view class="luck-ibox" wx:if="{{isLuckState}}">
+    <view class="luck-top">目前发放奖励：<view class="num">{{giftNum}}</view></view>
+    <view class="luck-bottom">
+      <view class="btn-1" catchtap='bindLuckLayer'>取消</view>
+      <view class="btn-2" catchtap='bindLuckState'>{{luckState ?'已开启':'已关闭'}}</view>
+    </view>
+  </view>
+
+  <!-- 设置弹窗 -->
+  <view class="set-ibox" wx:if='{{isSetGuessState}}'>
+    <view class="close" catchtap='bindSetGuess'>
+      <image src="img/close.png"></image>
+    </view>
+    <view class="set-title">竞彩开始／关闭按钮</view>
+    <!-- 开启竞猜加类 begin-guess -->
+    <view class="set-btn-area {{isSetGuessBegin?'begin-guess':''}}" catchtap='bindSetGuessBegin'>
+      <view class="btn-bg">
+        <view class="set-ibox-btn">{{isSetGuessBegin?'关闭':'开启'}}</view>
+      </view>
+    </view>
+    <view class="mid-title">竞彩结果设置</view>
+    <view class="set-choose">
+      <!-- 选中加类 active -->
+      <view class="choose {{setGuessResult==='A'?'active':''}}" data-id='A' catchtap='bindChooseGuess'>
+        <view class="choose-1">A</view>
+      </view>
+      <view class="choose {{setGuessResult==='B'?'active':''}}" data-id='B' catchtap='bindChooseGuess'>
+        <view class="choose-2">B</view>
+      </view>
+    </view>
+    <!-- 激活以后加类 active-set-btn -->
+    <view class="set-real-btn active-set-btn"  catchtap='bindSetGuess'>确　定</view>
+  </view>
 
 </view>

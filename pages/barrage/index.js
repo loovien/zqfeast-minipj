@@ -1,146 +1,264 @@
-var app = getApp()
+let app = getApp();
+
 Page({
-    data: {
-        flag: true,//加号的控制打开/关闭
-        userInfo: [],//用户信息，用于头像显示
-        msgList: [{
-            content: '发送弹幕随机抽奖',
-            content_type: 0,
-            contract_info: '',//弹出框input值
-            myDate: '',
-            role: false,
-            img: '../../images/01_03.png',
-        }, {
-            content: '我要发弹幕中奖',
-            content_type: 0,
-            contract_info: '',
-            myDate: '',
-            role: true,
-            img: "../../images/01_07.png"
-        }
-        ],//返回数据
-        minutes: '',//分钟间隔
-        addinput: '',//清楚input框的值
-        sendflag: false,//发送按钮控制
-        networkType: '',//判断当前网络类型
-        addtell: {
-            addtellHidden: true,//弹出框显示/隐藏
 
-        },
-    },
+  /**
+   * 页面的初始数据
+   */
+  data: {
+    isAdmin: true, //是否为管理员
+    isVerify: true,//是否ID验证
+    danmakuList: [], //弹幕列表
+    isScroll: true,
+    userInfo: null,
+    giftNum: 0, //奖励发放数量
+    isProgramState: false, //节目列表弹窗状态
+    isWinning: false, //是否中奖
+    isLuckState: false, //弹幕抽奖设置
+    isHot: false, //速弹展示状态
+    isDisable: true, //发送按钮状态
+    isMore: 0, //未读消息
+    danmakuContent: '', //弹幕内容
+    isGuessState: false, //竞猜弹窗状态
+    luckState: true, //是否开启弹幕抽奖
+    isConnect: true,//弹幕连接状态，
+    isError: false, //弹幕连接失败
+    isSetGuessState: false,//设置竞猜状态
+    isSetGuessBegin: false,//是否开启设置
+    setGuessResult: '', //设置竞猜结果
+    chooseGuessResult: '',//选择竞猜结果
+    isGuessLayerShow: false, //用户竞猜确认
+    isBootom: false,//是否到底部
+    isBeginSuess:false,//竞猜活动是否开启
+    hotList: [
+      '战旗威武！',
+      '小姐姐666~我为你打CALL',
+      '帅帅帅帅帅帅！',
+      '下一个奖是我的',
+      '这个节目是今晚最棒的！',
+      '100把大宝剑送给你']
+  },
 
-    onLoad: function (options) {
-
-        // 页面监控
-        //app.globalData.hotapp.count(this)
-        // 页面初始化 options为页面跳转所带来的参数
-    },
-    onReady: function () {
-        // 页面渲染完成
-    },
-    onShow: function () {
-        // 页面显示
-        //将全局的方法赋值
-        var that = this;
-    },
-
-    bindfocus: function (e) {
-        var that = this;
-    },
-
-    bindblur: function (e) {
-        var that = this;
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function (options) {
+    if (app.globalData.userInfo) {
+      this.setData({
+        userInfo: app.globalData.userInfo,
+      })
+    } else { //异步获取用户信息
+      app.userInfoReadyCallback = res => {
         this.setData({
-            sendflag:false
+          userInfo: res.userInfo,
         })
-        //提交输入框的数据
-        if (e.detail.value != '' && this.data.networkType != 'fail') {
-
-            //获取当前时间
-            var myDate = new Date();
-            var hours = myDate.getHours();       //获取当前小时数(0-23)
-            var minutes = myDate.getMinutes();     //获取当前分钟数(0-59)
-            //如果两次时间
-            if (minutes == this.data.minutes) {
-                var mydata = ''
-            } else {
-                var mydata = hours + ':' + minutes
-            }
-
-
-            //消息数组，系统默认
-            var newMsgList = this.data.msgList
-            newMsgList.push({
-                content: e.detail.value,
-                content_type: 0,
-                contract_info: that.data.contract_info,
-                myDate: mydata,
-                role: false,
-                img: that.data.userInfo.avatarUrl,
-            }, {
-                content: '恭喜您, 中奖了个大宝剑',
-                content_type: 0,
-                contract_info: '',
-                myDate: '',
-                role: true,
-                img: "../../images/01_07.png"
-            })
-
-            this.setData({
-                addinput: [],
-                sendflag: false,
-                minutes: minutes,
-                msgList: newMsgList
-            })
-        }
-    },
-    bindtapimg: function () {
-        //打开添加图片框
-        this.setData({
-            flag: false
-        })
-    },
-    closeimg: function () {
-        //闭合添加图片框
-        this.setData({
-            flag: true
-        })
-    },
-    footaddimg: function () {
-        var that = this;
-        //使用hotapp接口获取图片路径
-        app.globalData.hotapp.uploadFeedbackImage(res => {
-            //添加到反馈数组
-            var newfeedback = that.data.feedback;
-            newfeedback.push({
-                content: res,
-                content_type: 1,
-                contract_info: '',
-                role: false,
-                img: that.data.userInfo.avatarUrl,
-            }, {
-                content: '【系统消息】：您的反馈已收到！',
-                content_type: 0,
-                contract_info: that.data.contract_info,
-                role: true,
-                img: "../../images/01_07.png"
-            })
-            //修改feedback
-            that.setData({
-                flag: true,
-                feedback: newfeedback
-            })
-            //添加图片到服务器
-
-            app.globalData.hotapp.feedback(res, 1, that.data.contract_info, function (res) {
-                console.log(res)
-            })
-        })
-    },
-    onHide: function () {
-        // 页面隐藏
-    },
-    onUnload: function () {
-        // 页面关闭
+      }
     }
+  },
+
+  /**
+   * 生命周期函数--监听页面初次渲染完成
+   */
+  onReady: function () {
+    // setInterval(()=>{
+    //   this.bindSendDanmaku();
+    //   this.setData({
+    //     isMore: this.data.isMore + 1,
+    //   })
+    // },3000)
+  },
+
+  /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function () {
+    setTimeout(() => {
+      this.setData({
+        isConnect: false,
+      })
+    }, 6000)
+
+  },
+
+  /**
+   * 生命周期函数--监听页面隐藏
+   */
+  onHide: function () {
+    this.setData({
+      isConnect: true
+    })
+  },
+
+  /**
+   * 生命周期函数--监听页面卸载
+   */
+  onUnload: function () {
+
+  },
+
+  /**
+   * 页面相关事件处理函数--监听用户下拉动作
+   */
+  onPullDownRefresh: function () {
+
+  },
+
+  /**
+   * 页面上拉触底事件的处理函数
+   */
+  onReachBottom: function () {
+
+  },
+
+  /**
+   * 用户点击右上角分享
+   */
+  onShareAppMessage: function () {
+
+  },
+
+  // ----------------------中奖提示---------------//
+  bindWinningClose: function () { //弹框--关
+    this.setData({
+      isWinning: false,
+    })
+  },
+
+  //-------------------弹幕----------------//
+  bindHotShow: function () {//速弹--开/关
+    this.setData({
+      isHot: !this.data.isHot,
+    })
+  },
+
+  bindKeyInput: function (e) {   //获取弹幕内容
+    let value = e.detail.value.trim();//去头尾空格
+    this.setData({
+      danmakuContent: value
+    })
+  },
+
+  bindSendDanmaku: function (e) {  //发送弹幕
+    if (this.data.danmakuContent.length <= 0) { //内容为空
+      return;
+    }
+    this._pushDanmakuList(this.data.danmakuContent);
+  },
+
+  bindHotSend: function (e) { //快速弹幕发送
+    let index = e.currentTarget.dataset.index;
+    this._pushDanmakuList(this.data.hotList[index]);
+    this.setData({
+      isHot: !this.data.isHot,
+    })
+  },
+
+  bindMoreMessage: function () {  //更多消息
+    this.setData({
+      isMore: 0,
+      isScroll: true
+    })
+    this.bindScroll();
+  },
+
+  // private
+  _pushDanmakuList: function (text) { //弹幕内容添加
+    let danmakuList = this.data.danmakuList;
+    danmakuList.push(
+      {
+        content: text,
+        nickName: this.data.userInfo.nickName,
+        isMyself: true
+      }
+    )
+    this.setData({
+      danmakuList: danmakuList,
+      danmakuContent: '',
+    })
+    this.bindScroll();
+  },
+
+  //---------------弹幕抽奖---------------//
+  bindLuckLayer: function () { //设置弹窗--开/关
+    this.setData({
+      isLuckState: !this.data.isLuckState,
+    })
+  },
+  bindLuckState: function () { //抽奖--开/关
+    this.setData({
+      luckState: !this.data.luckState
+    })
+  },
+
+  //---------------节目单------------------//
+  bindProgramLayer: function () { //弹窗--开/关
+    this.setData({
+      isProgramState: !this.data.isProgramState,
+    })
+  },
+
+  //---------------竞猜------------------//
+  bindGuessLayer: function () { //弹窗--开/关
+    this.setData({
+      isGuessShow: !this.data.isGuessShow
+    })
+  },
+  bindSetGuess: function () { //弹窗--开/关
+    this.setData({
+      isSetGuessState: !this.data.isSetGuessState
+    })
+  },
+  bindSetGuessBegin: function () { //设置竞猜
+    this.setData({
+      isSetGuessBegin: !this.data.isSetGuessBegin
+    })
+  },
+
+  bindChooseGuess: function (e) { //管理员竞猜结果设置
+    let result = e.currentTarget.dataset.id;
+    this.setData({
+      setGuessResult: result
+    })
+  },
+
+  bindChooseResult: function (e) {//用户竞猜选择
+    let result = e.currentTarget.dataset.id;
+    this.setData({
+      chooseGuessResult: result,
+      isGuessLayerShow: true,
+    })
+  },
+
+  bindAffirmResult: function () { //用户确认选择
+    this.setData({
+      isGuessLayerShow: false,
+      isGuessShow: false,
+    })
+  },
+  bindACancelResult: function () { //用户取消选择
+    this.setData({
+      isGuessLayerShow: false,
+    })
+  },
+
+  //  ---------------------公用函数-------------
+  bindScroll: function () {  //滚动到最底部
+    if (this.data.isScroll) {
+      wx.pageScrollTo({
+        scrollTop: 999999,
+      })
+    }
+  },
+
+  bindIsScroll: function (e) { //禁止弹幕滚屏
+    this.setData({
+      isScroll: false,
+    })
+  },
+  
+  bindScrollBottom: function (e) { //滚到底部
+    this.setData({
+      isBootom: true,
+    })
+  }
 })
