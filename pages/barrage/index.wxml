@@ -9,15 +9,15 @@
     <view class="welcome" wx:if="{{!isConnect}}">欢迎<view class="name">{{userInfo.nickName}}</view>进入<view class="color">【战旗直播年终狂欢】</view>请尽情的为战旗打CALL!更有丰富的弹幕礼物，等你来领！</view>
     <!-- 聊天区域 -->
     <!--自己加 myself 类-->
-    <view class="chat-li {{item.isMyself?'myself':''}}" wx:key wx:for="{{danmakuList}}">
+    <view class="chat-li {{item.token==uid ?'myself':''}}" wx:key wx:for="{{danmakuList}}">
       <view class="chat-li-cont">
-        <view class="name">{{item.nickName}}：</view>{{item.content}}
+        <view class="name">{{item.userInfo.nickname}}：</view>{{item.txt}}
       </view>
     </view>
     <view id='last{{danmakuList.length}}'></view>
   </scroll-view>
   <!-- 激活速弹加类 active-fast -->
-  <view class="chat-bottom {{isHot ? 'active-fast':''}}" wx:if="{{isVerify}}">
+  <view class="chat-bottom {{isHot ? 'active-fast':''}}" wx:if="{{uid}}">
     <view class="chat-input-area">
       <input class="input-area" value='{{danmakuContent}}' bindinput='bindKeyInput'></input>
       <!-- 不能发送加类 disable -->
@@ -76,7 +76,7 @@
       </view>
     </view>
     <!-- 没有开启加类 no-begin -->
-    <view class="guess-bottom no-begin1">
+    <view class="guess-bottom {{guessTop?'':'no-begin'}}">
       <image src="img/guess-bottom.png" class="guess-bottom-bg" ></image>
       <view class="guess-thead">
         <ul>
@@ -87,22 +87,22 @@
       </view>
       <view class="guess-tbody">
         <view class="nothing-text">暂无排名</view>
-        <view class="tr" wx:for='11111'>
-          <view class="li li-1">1</view>
-          <view class="li li-2">旅客发送了</view>
-          <view class="li li-3">30</view>
+        <view class="tr" wx:key wx:for='{{topList}}'>
+          <view class="li li-1">{{item.rank}}</view>
+          <view class="li li-2">{{item.nickname}}</view>
+          <view class="li li-3">{{item.score}}</view>
         </view>
         <view class="tr myself">
-          <view class="li li-1">145</view>
-          <view class="li li-2">{{userInfo.nickName}}</view>
-          <view class="li li-3">20</view>
+          <view class="li li-1">{{myselfList.rank}}</view>
+          <view class="li li-2">{{myselfList.nickname}}</view>
+          <view class="li li-3">{{myselfList.score}}</view>
         </view>
       </view>
     </view>
   </view>
 
   <!-- 竞猜确认弹窗 -->
-  <view class="guess-ibox-1" wx:if='{{isGuessLayerShow}}'>
+  <view class="guess-ibox-1" wx:if='{{isGuessLayerShow && (hasChoosed<0)}}'>
     <image src="img/guess-box-1.png" class="guess-bg-1" ></image>
     <view class="guess-top">请确认你的选择</view>
     <view class="guess-bottom">
@@ -130,7 +130,7 @@
   <view class="luck-ibox" wx:if="{{isLuckState}}">
     <view class="luck-top">目前发放奖励：<view class="num">{{giftNum}}</view></view>
     <view class="luck-bottom">
-      <view class="btn-1" catchtap='bindLuckLayer'>取消</view>
+      <view class="btn-1" catchtap='bindLuckLayerCancel'>取消</view>
       <view class="btn-2" catchtap='bindLuckState'>{{luckState ?'已开启':'已关闭'}}</view>
     </view>
   </view>
@@ -144,7 +144,7 @@
     <!-- 开启竞猜加类 begin-guess -->
     <view class="set-btn-area {{isSetGuessBegin?'begin-guess':''}}" catchtap='bindSetGuessBegin'>
       <view class="btn-bg">
-        <view class="set-ibox-btn">{{isSetGuessBegin?'关闭':'开启'}}</view>
+        <view class="set-ibox-btn">{{isSetGuessBegin?'已开启':'已关闭'}}</view>
       </view>
     </view>
     <view class="mid-title">竞彩结果设置</view>
@@ -158,7 +158,7 @@
       </view>
     </view>
     <!-- 激活以后加类 active-set-btn -->
-    <view class="set-real-btn active-set-btn"  catchtap='bindSetGuess'>确　定</view>
+    <view class="set-real-btn active-set-btn"  catchtap='bindSetGuessAffirm'>确　定</view>
   </view>
 
 </view>

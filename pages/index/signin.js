@@ -1,3 +1,5 @@
+let app = getApp();
+let apis = require("../../API/api.js");
 const fillZero = function (n) {
   return (n > 9) ? '' + n : '0' + n;
 }
@@ -8,11 +10,15 @@ Page({
    * 页面的初始数据
    */
   data: {
-    END_TIME: parseInt(+new Date("2018/01/10,10:55:00")),//活动结束时间
+    END_TIME: parseInt(+new Date("2018/01/15,17:30:00")),//活动结束时间
     currentTime: '000000', //倒计时时间
-    isBegin:false, //倒计时是否结束
-    inputValue:[],//身份ID
-    isRight:true, //ID 是否正确
+    isBegin: false, //倒计时是否结束
+    inputValue: [],//身份ID
+    isRight: true, //ID 是否正确
+    info: null,//数据信息
+    isVerify: false, //是否已验证
+    verifyLayer:false, //验证确认弹框
+    focus:false,//是否弹出键盘
   },
 
   /**
@@ -20,6 +26,27 @@ Page({
    */
   onLoad: function (options) {
     this.setTimes();
+
+    if (app.globalData.info) {
+      this.setData({
+        info: app.globalData.info,
+        inputValue: app.globalData.info[0].uid,
+        isVerify: app.globalData.info[0].uid,
+      })
+    } else { //异步获取用户信息
+      app.userInfoReadyCallback = res => {
+        // delete res[0].uid;
+        this.setData({
+          info: res,
+          inputValue: res[0].uid,
+          isVerify: res[0].uid,
+        })
+
+        // this.setData({
+        //   inputValue: app.globalData.info[0].uid,
+        // })
+      }
+    }
   },
 
   /**
@@ -83,10 +110,10 @@ Page({
       m = fillZero(parseInt(diff_time % 3600 / 60));
       s = fillZero(parseInt(parseInt(diff_time % 3600 % 60)));
     } else { //倒计时结束
-     this.setData({
-       isBegin:true,
-     })
-     clearInterval(this.timer);
+      this.setData({
+        isBegin: true,
+      })
+      clearInterval(this.timer);
     }
     this.setData({
       currentTime: `${h}${m}${s}`,
@@ -97,15 +124,20 @@ Page({
     this.setData({
       focus: true,
     })
+    if (this.data.isVerify) {
+      this.bindViewDanmaku();
+    }
   },
 
   bindKeyInput: function (e) { //数字输入
+    let _this = this;
     this.setData({
       inputValue: e.detail.value,
     })
-    if (this.data.inputValue.length >= 6) { //输入达到6位数自动校验
+    if (this.data.inputValue.length >= 6) { //输入达到6位数自动提示是否绑定
       this.setData({
-        isRight:false,
+        verifyLayer: true,
+        focus:false,
       })
     }
     if (this.data.inputValue.length < 6) {
@@ -115,9 +147,40 @@ Page({
     }
   },
 
-  bindViewDanmaku:function(){ //进入弹幕空间
-  wx.navigateTo({
-    url: '../barrage/index',
-  })
+  bindVerifyOk:function(){
+    
+    let _this = this;
+    let userInfo = this.data.info[1];
+    userInfo.avatar = userInfo.avatarUrl,
+      delete userInfo.avatarUrl;
+    let data = Object.assign({}, userInfo,
+      { uid: this.data.inputValue }, { openid: this.data.info[0].openid })
+    console.log(data);
+    apis.fetch(apis.API.USER_INFO, data)
+      .then(res => {
+        _this.setData({
+          verifyLayer:false,//隐藏提示
+        })
+        if (res.data.code === 0) { //验证通过
+          wx.navigateTo({
+            url: '../barrage/index',
+          })
+        } else { //验证失败
+          this.setData({
+            isRight: false,
+          })
+        }
+      })
+  },
+  bindViewDanmaku: function () { //进入弹幕空间
+    wx.navigateTo({
+      url: '../barrage/index',
+    })
+  },
+  bindcVerifyCancel:function(){
+    this.setData({
+      verifyLayer: false,//隐藏提示
+      inputValue: [],
+    })
   }
 })
