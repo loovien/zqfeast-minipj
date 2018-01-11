@@ -1,14 +1,50 @@
+<image class="main-bg" src="img/bg.jpg"></image>
 <view class="container">
-  <view class="user">
-  <image  class="user-avatar" src="{{userinfo.avatarUrl}}" background-size="cover"></image>
-    <text class='user-name'>{{userinfo.nickName}}</text>
-  </view>
-
-    <view class="content">
-        <text class="h1">战旗2017年会</text>
-        <view class='form'>
-          <input class="input" placeholder='请输入您的ID号'></input>
-          <button class='submit' bindtap="submit">提交</button>
-        </view>
+  <!-- 成功以后加类 done -->
+  <view class="section done1">
+    <!-- 验证失败加类 fail -->
+    <view class="input-area fail">
+      <view class="yz-area">
+        <image class="yz-sb-icon"src="img/sb.png" ></image>
+        <view class="yz-text">验证失败，请重新输入</view>
+      </view>
+      <image class="main-number" src="img/input.png"></image>
+      <input class="num-input" type='number'  maxlength="6" bindinput='bindKeyInput' focus="{{focus}}" />
+      <view class='number' bindtap="bindButtonTap">
+        <text class="text text-1">1</text>
+        <text class="text text-2">2</text>
+        <text class="text text-3">3</text>
+        <text class="text text-4">4</text>
+        <text class="text text-5">5</text>
+        <text class="text text-6">6</text>
+      </view>
     </view>
+    <view class="btn-area">
+      <view class="btn" bindtap="bindButtonTap">
+        <image class="btn-1" src="img/btn-1.png"></image>
+      </view>
+      <view class="btn" bindtap="bindButtonTap">
+        <image class="btn-1" src="img/btn-2.png"></image>
+      </view>
+      <view class="btn2" bindtap="bindButtonTap">
+        <image class="btn-2" src="img/btn-3.png"></image>
+      </view>
+      <view class="title">您也可以直接不输入身份ID直接进入，但不能参与弹幕互动哟</view>
+    </view>
+    <!-- 年会开始加类 begin -->
+    <view class="times begin">
+      <image class="times-img-top" src="img/num-top.png"></image>
+      <image class="times-img" src="img/num.png"></image>
+      <ul class="time-ul">
+        <li class="time time-1">1</li>
+        <li class="time time-2">2</li>
+        <li class="time time-3">3</li>
+        <li class="time time-4">4</li>
+        <li class="time time-5">5</li>
+        <li class="time time-6">6</li>
+      </ul>
+      <view class="title-begin">年会已开始</view>
+      <view class="title-bottom">晚会将于2018年1月25日晚 17:30 正式开始</view>
+    </view>
+  </view>
 </view>

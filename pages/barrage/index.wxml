@@ -1,41 +1,9 @@
 <view class="container">
-     <ul class="scrollwechat"  bindtap="closeimg">
-      <scroll-view class="scrollview" scroll-y="true" >
-      <block  wx:for="{{msgList}}" wx:key="index">
-       <li wx:if="{{item.myDate}}" class="mydate">
-            <view class="mydatebox">
-              <text class="mydatetext">{{item.myDate}}</text>
-             </view>
-        </li>
-      <li class="{{item.role?'sys':'user'}}">
-      <!--头像-->
-        <view class="{{item.role?'imgview1':'imgview2'}}"><image class="headimg" src="{{item.img}}"></image></view>
-        <!--三角-->
-         <view class="triangle">
-              <image wx:if="{{item.role}}"  src="../../images/triangleRight.png"></image>
-              <image wx:else  src="../../images/triangleLeft.png"></image>
-         </view>
-         <!--内容 ：图片/文字-->
-        <view class="{{item.role?'textview2':'textview'}}">
-          <view class="feedbackimg" wx:if="{{item.content_type}}">  <image  src="{{item.content}}"></image></view>
-          <text class="feedbacktext" wx:else>{{item.content}}</text>
-        </view>
-        <view wx:if="{{networkType=='fail'}}"><icon type="warn" size="20"/></view>
-        <view class="{{item.role?'imgview1':'imgview2'}}"></view>
-      </li>
-      </block>
-      <view class="link"></view>
-       </scroll-view>
-    </ul>
-
- 
-  <!--提交框-->
-  <view  class="footer">
-      <view  class="footinput">
-        <view class="input"><input bindfocus="bindfocus" bindblur='bindblur'  value="{{addinput}}" type="text" /></view>
-      </view>
-      <view  class="foodsend">
-        <view class="send">发送</view>
-      </view>
+  <view class="connect">
+    <view>正在连接弹幕服务器...</view>
+    <view>服务器开小差了，请退出该页面，重新进入再试一下，再试一下，请一定再试一下。</view>
   </view>
+  <view class="welcome">欢迎<view class="name">琥珀川</view>进入<view class="color">【战旗直播年终狂欢】</view>请尽情的为战旗打CALL!更有丰富的弹幕礼物，等你来领</view>
+
+
 </view>
