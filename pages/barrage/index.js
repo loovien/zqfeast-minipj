@@ -83,11 +83,14 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log(options.info);
-    if (options.info !== 'undefined') {
-      this.initData(options.info);
-    }
     let _this = this;
+    let data = JSON.parse(options.info);
+    if (options.info !== 'undefined') {
+      this.initData(data);
+    }
+    if (options.info !== 'undefined' && data.is_admin){ //管理员权限
+      this.iSdminFetch();
+    }
     // setInterval(()=>{
     //   a++;
     //   this.sendSocketMessage('测试'+ a);
@@ -105,8 +108,6 @@ Page({
   onReady: function () {
     this.fetchGuessInfo();
     this.fetchGuessTop();
-    this.fetchLuckyNumber();
-    this.fetchLotteryInfo();
   },
 
   /**
@@ -349,9 +350,7 @@ Page({
     })
   },
 
-  initData: function (info) { //异步获取用户信息
-  console.log(info);
-    let data = JSON.parse(info);
+  initData: function (data) { //异步获取用户信息
     this.setData({
       isAdmin: data.is_admin,
       uid: data.uid,
@@ -530,10 +529,8 @@ Page({
     strategyTypes[type].call(this, data);
   },
 
-  alertLayer: function (msg) {
-    wx.showToast({
-      title: msg,
-      duration: 2000
-    })
+  iSdminFetch: function () { //管理员权限
+    this.fetchLuckyNumber();
+    this.fetchLotteryInfo();
   }
 })
