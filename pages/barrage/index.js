@@ -353,9 +353,11 @@ Page({
          isAdmin: app.globalData.info[0].is_admin,
          uid: app.globalData.info[0].uid,
          isVerify: app.globalData.info[0].uid,
+         userInfo: app.globalData.userInfo
        })
      } else { //异步获取用户信息
        app.userInfoReadyCallback = res => {
+         console.log("------------------4-----------")
          delete res[0].uid;
          this.setData({
            isAdmin: res[0].is_admin,
