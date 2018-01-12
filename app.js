@@ -15,7 +15,7 @@ App({
       }
       return;
     }
-    let login = new Promise((resolve)=>{
+    let login = new Promise((resolve) => {
       wx.login({ // 登录
         success: function (resp) {
           // 发送 res.code 到后台换取 openId, sessionKey, unionId    
@@ -24,7 +24,7 @@ App({
               console.log(res);
               if (res.data.code === 0) {
                 resolve(res.data.data);
-                that.globalData.loginInfo = res.data.data
+                that.globalData.loginInfo = res.data.data;
               } else {
                 wx.showToast({
                   title: '网络异常，请关闭后，重新进入！',
@@ -43,40 +43,40 @@ App({
         }
       })
     })
-  let userInfo = new Promise((resolve)=>{
-    wx.getSetting({ // 获取用户信息
-      success: function (resp) {
-        if (!resp.authSetting['scope.userInfo']) {
-          wx.authorize({
-            scope: 'scope.userInfo',
+    let userInfo = new Promise((resolve) => {
+      wx.getSetting({ // 获取用户信息
+        success: function (resp) {
+          if (!resp.authSetting['scope.userInfo']) {
+            wx.authorize({
+              scope: 'scope.userInfo',
+              success: function (resp) {
+                console.log(resp);
+                console.log("授权成功")
+              },
+              fail: function (resp) {
+                console.log("未授权")
+              }
+            });
+          }
+          // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
+          wx.getUserInfo({
             success: function (resp) {
-              console.log(resp);
-              console.log("授权成功")
-            },
-            fail: function (resp) {
-              console.log("未授权")
+              console.log("用户信息", resp.userInfo);
+              that.globalData.userInfo = resp.userInfo // 可以将 res 发送给后台解码出 unionId
+              if (typeof callback == "function") {
+                callback(resp.userInfo);
+              }
+              resolve(resp.userInfo);
             }
           });
         }
-        // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
-        wx.getUserInfo({
-          success: function (resp) {
-            console.log("用户信息", resp.userInfo);
-            that.globalData.userInfo = resp.userInfo // 可以将 res 发送给后台解码出 unionId
-            if (typeof callback == "function") {
-              callback(resp.userInfo);
-            }
-            resolve(resp.userInfo);
-          }
-        });
-      }
-    });
-  })
-    Promise.all([login,userInfo]).then(res=>{
-      if (that.userInfoReadyCallback) { // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-        that.userInfoReadyCallback(res)
-      }
+      });
+    })
+    return Promise.all([login, userInfo]).then(res => {
       that.globalData.info = res;
+      if (that.userInfoReadyCallback) {
+        this.userInfoReadyCallback(res);
+      }
     });
   },
   onError: function (msg) {
@@ -84,8 +84,8 @@ App({
   globalData: {
     zafeast: {}, // 这里作为一个全局变量, 方便其它页面调用
     userInfo: null,
-    loginInfo:null,
-    info:null,
+    loginInfo: null,
+    info: null,
   },
   getSystemInfo: function () {
     wx.getSystemInfo({
