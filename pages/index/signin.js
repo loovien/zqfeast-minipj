@@ -34,7 +34,7 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-  
+
     this.timer = setInterval(() => {
       this.setTimes()
     }, 1000)
@@ -51,7 +51,7 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-    
+
   },
 
   /**
@@ -107,7 +107,7 @@ Page({
     this.setData({
       focus: true,
     })
-    if (this.data.isVerify && flag==='ajax') {
+    if (this.data.isVerify && flag === 'ajax') {
       this.bindVerifyOk();
     }
   },
@@ -133,21 +133,23 @@ Page({
   bindVerifyOk: function () { //签到提交
     let _this = this;
     let userInfo = this.data.info[1];
-    userInfo.avatar = userInfo.avatarUrl,
-      delete userInfo.avatarUrl;
+    userInfo.avatar = userInfo.avatarUrl;
+    userInfo.nickname = userInfo.nickName;
+    delete userInfo.avatarUrl;
+    delete userInfo.nickName;
+
     let data = Object.assign({}, userInfo,
       { uid: this.data.inputValue }, { openid: this.data.info[0].openid })
-    console.log(data);
     apis.fetch(apis.API.USER_INFO, data, "POST")
       .then(res => {
         _this.setData({
           verifyLayer: false,//隐藏提示
         })
         if (res.data.code === 0) { //验证通过
-        let info = JSON.stringify(res.data.data);
+          let info = JSON.stringify(res.data.data);
           _this.setData({
             inputValue: data.uid,
-            isVerify:true,
+            isVerify: true,
           })
           wx.navigateTo({
             url: `../barrage/index?info=${info}`,

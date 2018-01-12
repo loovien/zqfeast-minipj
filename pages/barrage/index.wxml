@@ -147,8 +147,8 @@
         <view class="set-ibox-btn">{{isSetGuessBegin?'开启':'关闭'}}</view>
       </view>
     </view>
-    <view class="mid-title">竞彩结果设置</view>
-    <view class="set-choose">
+    <view class="mid-title" wx:if='{{!isSetGuessBegin}}'>竞彩结果设置</view>
+    <view class="set-choose" wx:if='{{!isSetGuessBegin}}'>
       <!-- 选中加类 active -->
       <view class="choose {{(setGuessResult==='A' && !isSetGuessBegin)?'active':''}}" data-id='A' catchtap='bindChooseGuess'>
         <view class="choose-1">A</view>
