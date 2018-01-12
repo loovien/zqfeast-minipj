@@ -99,5 +99,8 @@ App({
         console.log(res.platform)
       }
     })
+  },
+  dFun:function(){
+    console.log(11111111111);
   }
 })

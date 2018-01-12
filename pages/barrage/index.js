@@ -40,8 +40,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    isAdmin: true, //是否为管理员
-    isVerify: true,//是否ID验证
+    isAdmin: false, //是否为管理员
+    isVerify: false,//是否ID验证
     danmakuList: [], //弹幕列表
     isScroll: true,
     hasChoosed: -1,//-1未操作
@@ -83,8 +83,11 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log(options.info);
+    if (options.info !== 'undefined') {
+      this.initData(options.info);
+    }
     let _this = this;
-    this.initData();
     // setInterval(()=>{
     //   a++;
     //   this.sendSocketMessage('测试'+ a);
@@ -100,7 +103,6 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    this.initData();
     this.fetchGuessInfo();
     this.fetchGuessTop();
     this.fetchLuckyNumber();
@@ -169,7 +171,7 @@ Page({
     let value = e.detail.value.trim();//去头尾空格
     this.setData({
       danmakuContent: value,
-      isDisable:value.length>0
+      isDisable: value.length > 0
     })
 
     console.log(this.data.danmakuContent)
@@ -347,28 +349,18 @@ Page({
     })
   },
 
-  initData: function () { //异步获取用户信息
-     if (app.globalData.info) {
-       this.setData({
-         isAdmin: app.globalData.info[0].is_admin,
-         uid: app.globalData.info[0].uid,
-         isVerify: app.globalData.info[0].uid,
-         userInfo: app.globalData.userInfo
-       })
-     } else { //异步获取用户信息
-       app.userInfoReadyCallback = res => {
-         console.log("------------------4-----------")
-         delete res[0].uid;
-         this.setData({
-           isAdmin: res[0].is_admin,
-           uid: res[0].uid,
-           isVerify: res[0].uid,
-         })
-       }
-     }
-   },
+  initData: function (info) { //异步获取用户信息
+  console.log(info);
+    let data = JSON.parse(info);
+    this.setData({
+      isAdmin: data.is_admin,
+      uid: data.uid,
+      isVerify: data.uid,
+      userInfo: data
+    })
+  },
 
-// ----------------接口交互-----------------//
+  // ----------------接口交互-----------------//
   fetchGuessInfo: function () { //获取竞猜状态
     let _this = this;
     let data = { uid: this.data.uid };

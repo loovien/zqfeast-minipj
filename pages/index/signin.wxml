@@ -21,7 +21,7 @@
       </view>
     </view>
     <view class="btn-area">
-      <view class="btn" bindtap="bindButtonTap">
+      <view class="btn" bindtap="bindButtonTap" data-id='ajax'>
         <image class="btn-1" src="img/btn-1.png"></image>
       </view>
       <view class="btn" bindtap="bindViewDanmaku">

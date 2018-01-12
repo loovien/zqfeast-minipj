@@ -51,7 +51,7 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-    this.getUidKey('uid');
+    
   },
 
   /**
@@ -102,12 +102,13 @@ Page({
     })
   },
 
-  bindButtonTap: function () { //弹出键盘
+  bindButtonTap: function (e) { //弹出键盘
+    let flag = e.currentTarget.dataset.id;
     this.setData({
       focus: true,
     })
-    if (this.data.isVerify) {
-      this.bindViewDanmaku();
+    if (this.data.isVerify && flag==='ajax') {
+      this.bindVerifyOk();
     }
   },
 
@@ -129,8 +130,7 @@ Page({
     }
   },
 
-  bindVerifyOk: function () {
-
+  bindVerifyOk: function () { //签到提交
     let _this = this;
     let userInfo = this.data.info[1];
     userInfo.avatar = userInfo.avatarUrl,
@@ -144,16 +144,13 @@ Page({
           verifyLayer: false,//隐藏提示
         })
         if (res.data.code === 0) { //验证通过
+        let info = JSON.stringify(res.data.data);
           _this.setData({
             inputValue: data.uid,
             isVerify:true,
           })
-          wx.setStorage({
-            key: "uid",
-            data: { uid: data.uid, isVerify:true},
-          })
           wx.navigateTo({
-            url: '../barrage/index',
+            url: `../barrage/index?info=${info}`,
           })
         } else { //验证失败
           this.setData({
@@ -164,7 +161,7 @@ Page({
   },
   bindViewDanmaku: function () { //进入弹幕空间
     wx.navigateTo({
-      url: '../barrage/index',
+      url: `../barrage/index?info`,
     })
   },
   bindcVerifyCancel: function () {
@@ -190,18 +187,4 @@ Page({
       }
     }
   },
-  getUidKey:function(key){
-    let _this = this;
-    wx.getStorage({
-      key: key,
-      success: function (res) {
-        if(res.data) {
-          _this.setData({
-            inputValue: res.data.uid,
-            isVerify: res.data.isVerify,
-          })
-        }
-      }
-    })
-  }
 })
