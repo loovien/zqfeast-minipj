@@ -9,7 +9,7 @@ const API = {
   ADMIN_LOTTERY_INFO: BASEURL + '/admin/lottery/info.json', //管理员获取弹幕抽奖开关信息
   ADMIN_LOTTERY_FLAG: BASEURL + '/admin/lottery/switcher.json',//管理员开启关闭弹幕关闭弹幕抽奖
   ADMIN_GUESS_FLAG: BASEURL + '/admin/guess/switcher.json', //管理员开启关闭竞猜 
-  WSS: 'wss://luckybb.zhanqi.tv/websocket' //wss链接
+  WSS: 'wss://luckybb.zhanqi.tv/websocket' //wss连接
 }
 
 let fetch = function (url, data, type = 'GET') {

@@ -17,42 +17,24 @@ Page({
     isRight: true, //ID 是否正确
     info: null,//数据信息
     isVerify: false, //是否已验证
-    verifyLayer:false, //验证确认弹框
-    focus:false,//是否弹出键盘
+    verifyLayer: false, //验证确认弹框
+    focus: false,//是否弹出键盘
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    let _this = this;
     this.setTimes();
-
-    if (app.globalData.info) {
-      this.setData({
-        info: app.globalData.info,
-        inputValue: app.globalData.info[0].uid,
-        isVerify: app.globalData.info[0].uid,
-      })
-    } else { //异步获取用户信息
-      app.userInfoReadyCallback = res => {
-        // delete res[0].uid;
-        this.setData({
-          info: res,
-          inputValue: res[0].uid,
-          isVerify: res[0].uid,
-        })
-
-        // this.setData({
-        //   inputValue: app.globalData.info[0].uid,
-        // })
-      }
-    }
+    this.initData();
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
+  
     this.timer = setInterval(() => {
       this.setTimes()
     }, 1000)
@@ -62,14 +44,14 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    this.data.inputValue;
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-
+    this.getUidKey('uid');
   },
 
   /**
@@ -137,7 +119,7 @@ Page({
     if (this.data.inputValue.length >= 6) { //输入达到6位数自动提示是否绑定
       this.setData({
         verifyLayer: true,
-        focus:false,
+        focus: false,
       })
     }
     if (this.data.inputValue.length < 6) {
@@ -147,8 +129,8 @@ Page({
     }
   },
 
-  bindVerifyOk:function(){
-    
+  bindVerifyOk: function () {
+
     let _this = this;
     let userInfo = this.data.info[1];
     userInfo.avatar = userInfo.avatarUrl,
@@ -156,12 +138,20 @@ Page({
     let data = Object.assign({}, userInfo,
       { uid: this.data.inputValue }, { openid: this.data.info[0].openid })
     console.log(data);
-    apis.fetch(apis.API.USER_INFO, data,"POST")
+    apis.fetch(apis.API.USER_INFO, data, "POST")
       .then(res => {
         _this.setData({
-          verifyLayer:false,//隐藏提示
+          verifyLayer: false,//隐藏提示
         })
         if (res.data.code === 0) { //验证通过
+          _this.setData({
+            inputValue: data.uid,
+            isVerify:true,
+          })
+          wx.setStorage({
+            key: "uid",
+            data: { uid: data.uid, isVerify:true},
+          })
           wx.navigateTo({
             url: '../barrage/index',
           })
@@ -177,10 +167,41 @@ Page({
       url: '../barrage/index',
     })
   },
-  bindcVerifyCancel:function(){
+  bindcVerifyCancel: function () {
     this.setData({
       verifyLayer: false,//隐藏提示
-      inputValue: [],
+    })
+  },
+  initData: function () { //异步获取用户信息
+    if (app.globalData.info) {
+      this.setData({
+        info: app.globalData.info,
+        inputValue: app.globalData.info[0].uid,
+        isVerify: app.globalData.info[0].uid,
+      })
+    } else { //异步获取用户信息
+      app.userInfoReadyCallback = res => {
+        // delete res[0].uid;
+        this.setData({
+          info: res,
+          inputValue: res[0].uid,
+          isVerify: res[0].uid,
+        })
+      }
+    }
+  },
+  getUidKey:function(key){
+    let _this = this;
+    wx.getStorage({
+      key: key,
+      success: function (res) {
+        if(res.data) {
+          _this.setData({
+            inputValue: res.data.uid,
+            isVerify: res.data.isVerify,
+          })
+        }
+      }
     })
   }
 })

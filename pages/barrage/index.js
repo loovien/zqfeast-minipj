@@ -4,7 +4,9 @@ let apis = require("../../API/api.js");
 let strategyTypes = { //协议集合
   "common": function (data) { //弹幕列表
     this.pushDanmakuList(data);
-    console.log(data);
+    this.setData({
+      isMore: this.data.isMore + 1,
+    })
   },
   "luck": function (data) { //中奖
     if (data.token == this.data.uid) { //token值等于UID值中奖
@@ -38,8 +40,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    isAdmin: false, //是否为管理员
-    isVerify: false,//是否ID验证
+    isAdmin: true, //是否为管理员
+    isVerify: true,//是否ID验证
     danmakuList: [], //弹幕列表
     isScroll: true,
     hasChoosed: -1,//-1未操作
@@ -51,7 +53,7 @@ Page({
     isWinning: false, //是否中奖
     isLuckState: false, //弹幕抽奖设置
     isHot: false, //速弹展示状态
-    isDisable: true, //发送按钮状态
+    isDisable: false, //发送按钮状态
     isMore: 0, //未读消息
     topList: [],//其他积分榜
     myselfList: {},//自己积分榜
@@ -61,7 +63,7 @@ Page({
     isConnect: false,//弹幕连接状态，
     isError: false, //弹幕连接失败
     isSetGuessState: false,//设置竞猜状态
-    isSetGuessBegin: false,//是否开启设置
+    isSetGuessBegin: true,//是否开启设置
     setGuessResult: '', //设置竞猜结果
     chooseGuessResult: '',//选择竞猜结果
     isGuessLayerShow: false, //用户竞猜确认
@@ -81,65 +83,51 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
-    if (app.globalData.info) {
-      this.setData({
-        uid: app.globalData.info[0].uid,
-        userInfo: app.globalData.userInfo,
-        isAdmin: app.globalData.info[0].is_admin,
-      })
-    } else { //异步获取用户信息
-      app.userInfoReadyCallback = res => {
-        this.setData({
-          uid: app.globalData.info[0].uid,
-          userInfo: app.globalData.userInfo,
-          isAdmin: app.globalData.info[0].is_admin,
-        })
-      }
-
-      // setInterval(()=>{
-      //   a++;
-      //   this.sendSocketMessage('测试'+ a);
-      // },5000)
-    }
+    let _this = this;
+    this.initData();
+    // setInterval(()=>{
+    //   a++;
+    //   this.sendSocketMessage('测试'+ a);
+    // },5000)
+    // let a = 1;
+    // setInterval(() => {
+    //   a++;
+    //   this.pushDanmakuList({ userInfo: { nickname: 'hei' }, txt: '烦烦烦' + a });
+    // }, 1000)
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    // setInterval(()=>{
-    //   this.bindSendDanmaku();
-    //   this.setData({
-    //     isMore: this.data.isMore + 1,
-    //   })
-    // },3000)
+    this.initData();
     this.fetchGuessInfo();
     this.fetchGuessTop();
     this.fetchLuckyNumber();
     this.fetchLotteryInfo();
-
-    this.socketFunction();
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-
+  onShow: function () {
+    this.socketFunction();
+  },
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-    this.setData({
-      danmakuList: []
-    })
+
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-
+    wx.closeSocket();
+    this.setData({
+      danmakuList: []
+    })
   },
 
   /**
@@ -180,8 +168,11 @@ Page({
   bindKeyInput: function (e) {   //获取弹幕内容
     let value = e.detail.value.trim();//去头尾空格
     this.setData({
-      danmakuContent: value
+      danmakuContent: value,
+      isDisable:value.length>0
     })
+
+    console.log(this.data.danmakuContent)
   },
 
   bindSendDanmaku: function (e) {  //发送弹幕
@@ -190,6 +181,9 @@ Page({
     }
 
     this.sendSocketMessage(this.data.danmakuContent);
+    this.setData({
+      danmakuContent: '',
+    })
   },
 
   bindHotSend: function (e) { //快速弹幕发送
@@ -232,7 +226,7 @@ Page({
     this.bindLuckLayerCancel();
   },
 
-  // private
+
   pushDanmakuList: function (list) { //弹幕内容添加
     let danmakuList = this.data.danmakuList;
     danmakuList.push(list)
@@ -240,7 +234,6 @@ Page({
       danmakuList: danmakuList,
       danmakuContent: '',
     })
-    this.bindScroll();
   },
   //---------------节目单------------------//
   bindProgramLayer: function () { //弹窗--开/关
@@ -250,11 +243,15 @@ Page({
   },
 
   //---------------竞猜------------------//
-  bindGuessLayer: function () { //弹窗--开/关
+  bindGuessLayer: function (e) { //弹窗--开/关
+    let flag = e.currentTarget.dataset.id;
+    if (flag === 'ajax') {
+      this.fetchGuessInfo();
+    }
     this.setData({
       isGuessShow: !this.data.isGuessShow
     })
-    this.fetchGuessInfo();
+
   },
   bindSetGuess: function (e) { //设置弹窗--开/关
     let flag = e.currentTarget.dataset.id;
@@ -266,8 +263,13 @@ Page({
       this.fetchGuessInfo();
     }
   },
-  bindSetGuessAffirm: function () { //确认竞猜
-    this.fetchGuessFlag();
+  bindSetGuessAffirm: function (e) { //确认竞猜
+    let flag = e.currentTarget.dataset.id;
+    if (flag === 'ok') { //可点击状态
+      this.fetchGuessFlag();
+    } else {
+      return;
+    }
     this.setData({
       isSetGuessState: false
     })
@@ -345,6 +347,26 @@ Page({
     })
   },
 
+  initData: function () { //异步获取用户信息
+     if (app.globalData.info) {
+       this.setData({
+         isAdmin: app.globalData.info[0].is_admin,
+         uid: app.globalData.info[0].uid,
+         isVerify: app.globalData.info[0].uid,
+       })
+     } else { //异步获取用户信息
+       app.userInfoReadyCallback = res => {
+         delete res[0].uid;
+         this.setData({
+           isAdmin: res[0].is_admin,
+           uid: res[0].uid,
+           isVerify: res[0].uid,
+         })
+       }
+     }
+   },
+
+// ----------------接口交互-----------------//
   fetchGuessInfo: function () { //获取竞猜状态
     let _this = this;
     let data = { uid: this.data.uid };
@@ -384,7 +406,6 @@ Page({
     apis.fetch(apis.API.GUESS_TOP, { uid: this.data.uid })
       .then(res => {
         let data = res.data;
-        console.log(data);
         if (data.code === 0) {
           _this.setData({
             guessTop: data.data.list,
@@ -466,7 +487,7 @@ Page({
     wx.onSocketOpen(function (res) {
       console.log('----------------------连接成功------------------')
       _this.setData({
-        // isConnect: false,
+        isConnect: true,
         isError: false,
       })
     });
@@ -478,9 +499,19 @@ Page({
       let data = JSON.parse(res.data);
       _this.calcStrategyTypes(data.type, data);
     });
+
     //连接失败
     wx.onSocketError(function () {
       console.log('websocket连接失败！');
+      _this.setData({
+        isError: true,
+        isConnect: false,
+      })
+    })
+
+    //关闭连接
+    wx.onSocketClose(function () {
+      console.log('websocket连接关闭！');
       _this.setData({
         isError: true,
         isConnect: false,
