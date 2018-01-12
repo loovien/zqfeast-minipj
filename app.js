@@ -3,18 +3,17 @@ let api = require("API/api.js");
 App({
   onLaunch: function () {
     var that = this;
-    that.fetchUserInfo();
     // this.getSystemInfo();
     // console.log(this.fetchUserInfo());
   },
   fetchUserInfo: function (callback) {
     var that = this;
-    if (that.globalData.userInfo) {
-      if (typeof callback == "function") {
-        callback(that.globalData.userInfo);
-      }
-      return;
-    }
+    // if (that.globalData.userInfo) {
+    //   if (typeof callback == "function") {
+    //     callback(that.globalData.userInfo);
+    //   }
+    //   return;
+    // }
     let login = new Promise((resolve) => {
       wx.login({ // 登录
         success: function (resp) {
@@ -72,12 +71,7 @@ App({
         }
       });
     })
-    return Promise.all([login, userInfo]).then(res => {
-      that.globalData.info = res;
-      if (that.userInfoReadyCallback) {
-        this.userInfoReadyCallback(res);
-      }
-    });
+    return Promise.all([login, userInfo]);
   },
   onError: function (msg) {
   },

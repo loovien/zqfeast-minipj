@@ -25,16 +25,18 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    app.fetchUserInfo();
+    console.log('111111111111111111');
+    let _this = this;
     this.setTimes();
-    this.initData();
+    app.fetchUserInfo().then(res => {
+      _this.initData(res);
+    })
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-
     this.timer = setInterval(() => {
       this.setTimes()
     }, 1000)
@@ -132,34 +134,38 @@ Page({
 
   bindVerifyOk: function () { //签到提交
     let _this = this;
-    let userInfo = this.data.info[1];
-    userInfo.avatar = userInfo.avatarUrl;
-    userInfo.nickname = userInfo.nickName;
-    delete userInfo.avatarUrl;
-    delete userInfo.nickName;
+    app.fetchUserInfo().then(arrInfo => {
+      
+      let userInfo = arrInfo[1]; //用户信息
+      userInfo.avatar = userInfo.avatarUrl;
+      userInfo.nickname = userInfo.nickName;
+      delete userInfo.avatarUrl;
+      delete userInfo.nickName;
 
-    let data = Object.assign({}, userInfo,
-      { uid: this.data.inputValue }, { openid: this.data.info[0].openid })
-    apis.fetch(apis.API.USER_INFO, data, "POST")
-      .then(res => {
-        _this.setData({
-          verifyLayer: false,//隐藏提示
-        })
-        if (res.data.code === 0) { //验证通过
-          let info = JSON.stringify(res.data.data);
+      let data = Object.assign({}, userInfo,
+        { uid: this.data.inputValue }, { openid: arrInfo[0].openid })
+
+      apis.fetch(apis.API.USER_INFO, data, "POST")
+        .then(res => {
           _this.setData({
-            inputValue: data.uid,
-            isVerify: true,
+            verifyLayer: false,//隐藏提示
           })
-          wx.navigateTo({
-            url: `../barrage/index?info=${info}`,
-          })
-        } else { //验证失败
-          this.setData({
-            isRight: false,
-          })
-        }
-      })
+          if (res.data.code === 0) { //验证通过
+            let info = JSON.stringify(res.data.data);
+            _this.setData({
+              inputValue: data.uid,
+              isVerify: true,
+            })
+            wx.navigateTo({
+              url: `../barrage/index?info=${info}`,
+            })
+          } else { //验证失败
+            this.setData({
+              isRight: false,
+            })
+          }
+        })
+    })
   },
   bindViewDanmaku: function () { //进入弹幕空间
     wx.navigateTo({
@@ -171,22 +177,12 @@ Page({
       verifyLayer: false,//隐藏提示
     })
   },
-  initData: function () { //异步获取用户信息
-    if (app.globalData.info) {
-      this.setData({
-        info: app.globalData.info,
-        inputValue: app.globalData.info[0].uid,
-        isVerify: app.globalData.info[0].uid,
-      })
-    } else { //异步获取用户信息
-      app.userInfoReadyCallback = res => {
-        // delete res[0].uid;
-        this.setData({
-          info: res,
-          inputValue: res[0].uid,
-          isVerify: res[0].uid,
-        })
-      }
-    }
+
+  initData: function (data) { //异步获取用户信息
+    this.setData({
+      info: data,
+      inputValue: data[0].uid,
+      isVerify: data[0].uid,
+    })
   },
 })

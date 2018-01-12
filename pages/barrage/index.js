@@ -95,15 +95,6 @@ Page({
       let data = JSON.parse(options.info);
       this.initData(data);
     }
-    // setInterval(()=>{
-    //   a++;
-    //   this.sendSocketMessage('测试'+ a);
-    // },5000)
-    // let a = 1;
-    // setInterval(() => {
-    //   a++;
-    //   this.pushDanmakuList({ userInfo: { nickname: 'hei' }, txt: '烦烦烦' + a });
-    // }, 1000)
   },
 
   /**
@@ -342,6 +333,7 @@ Page({
 
   bindIsScroll: function (e) { //禁止弹幕滚屏
     this.setData({
+      isMore:0,
       isScroll: false,
     })
   },
