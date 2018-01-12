@@ -101,12 +101,12 @@ Page({
     //   a++;
     //   this.sendSocketMessage('测试'+ a);
     // },5000)
-  //   let a = 1;
-  //   setInterval(() => {
-  //     a++;
-  //     this.pushDanmakuList({ userInfo: { nickname: 'hei' }, txt: '烦烦烦' + a });
-  //   }, 1000)
-  // },
+    // let a = 1;
+    // setInterval(() => {
+    //   a++;
+    //   this.pushDanmakuList({ userInfo: { nickname: 'hei' }, txt: '烦烦烦' + a });
+    // }, 1000)
+  },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
