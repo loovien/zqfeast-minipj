@@ -136,7 +136,7 @@
   </view>
 
   <!-- 设置弹窗 -->
-  <view class="set-ibox" wx:if='{{isSetGuessState}}'>
+  <view class="set-ibox {{!isSetGuessBegin?'open-height':''}}" wx:if='{{isSetGuessState}}' >
     <view class="close" catchtap='bindSetGuess'>
       <image src="img/close.png"></image>
     </view>

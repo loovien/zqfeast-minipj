@@ -402,6 +402,12 @@ Page({
       .then(res => {
         let data = res.data;
         if (data.code === 0) {
+          if (data.data.list.length<10) {
+            let len = data.data.list.length;
+            for (let i = 0; i < 10 - len;i++) {
+              data.data.list.push({ score: 5, nickname: "👑布里塞伊斯💤", rank: 1 });
+            }
+          }
           _this.setData({
             guessTop: data.data.list,
             topList: data.data.list,

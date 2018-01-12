@@ -45,7 +45,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    
+
   },
 
   /**
@@ -83,7 +83,8 @@ Page({
 
   },
 
-  setTimes: function () { //倒计时计算
+  //倒计时计算
+  setTimes: function () {
     let h, m, s;
     let start_time = parseInt(Date.now());
     let diff_time = parseInt((this.data.END_TIME - start_time) / 1000);
@@ -103,7 +104,8 @@ Page({
     })
   },
 
-  bindButtonTap: function (e) { //弹出键盘
+  //键盘聚焦
+  bindButtonTap: function (e) {
     let flag = e.currentTarget.dataset.id;
     this.setData({
       focus: true,
@@ -113,7 +115,8 @@ Page({
     }
   },
 
-  bindKeyInput: function (e) { //数字输入
+  //UID输入
+  bindKeyInput: function (e) {
     let _this = this;
     this.setData({
       inputValue: e.detail.value,
@@ -131,10 +134,10 @@ Page({
     }
   },
 
-  bindVerifyOk: function () { //签到提交
+  //签到提交
+  bindVerifyOk: function () {
     let _this = this;
     app.fetchUserInfo().then(arrInfo => {
-      
       let userInfo = arrInfo[1]; //用户信息
       userInfo.avatar = userInfo.avatarUrl;
       userInfo.nickname = userInfo.nickName;
@@ -149,6 +152,7 @@ Page({
           _this.setData({
             verifyLayer: false,//隐藏提示
           })
+
           if (res.data.code === 0) { //验证通过
             let info = JSON.stringify(res.data.data);
             _this.setData({
@@ -166,18 +170,35 @@ Page({
         })
     })
   },
-  bindViewDanmaku: function () { //进入弹幕空间
-    wx.navigateTo({
-      url: `../barrage/index?info`,
-    })
-  },
-  bindcVerifyCancel: function () {
-    this.setData({
-      verifyLayer: false,//隐藏提示
+
+  //进入弹幕空间
+  bindViewDanmaku: function () {
+    app.fetchUserInfo().then(res => {
+      let data = Object.assign(res[0],res[1]);
+      data.nickname = data.nickName; //大小写切换
+      delete data.nickName;
+      if (res[0].uid) { //已绑定用户
+        let info = JSON.stringify(data);
+        wx.navigateTo({
+          url: `../barrage/index?info=${info}`,
+        })
+      } else {
+        wx.navigateTo({ //非绑定用户
+          url: `../barrage/index?info`,
+        })
+      }
     })
   },
 
-  initData: function (data) { //异步获取用户信息
+//隐藏提示
+  bindcVerifyCancel: function () {
+    this.setData({
+      verifyLayer: false,
+    })
+  },
+
+  //用户信息初始化
+  initData: function (data) {
     this.setData({
       info: data,
       inputValue: data[0].uid,
