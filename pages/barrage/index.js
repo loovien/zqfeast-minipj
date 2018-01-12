@@ -3,7 +3,6 @@ let apis = require("../../API/api.js");
 
 let strategyTypes = { //协议集合
   "common": function (data) { //弹幕列表
-    console.log(data);
     this.pushDanmakuList(data);
     this.setData({
       isMore: this.data.isMore + 1,
@@ -19,12 +18,14 @@ let strategyTypes = { //协议集合
   "guess.go": function (data) {//开启竞猜
     let content = Object.assign({}, data, {userInfo:{ nickname: '系统消息' }});
     this.pushDanmakuList(content);
-    this.guessTimer = setTimeout(() => {
-      this.setData({
-        isGuessShow: true,
-        isBeginSuess: true,
-      })
-    }, 3000)
+    if (this.data.isVerify){ //验证用户才能竞猜
+      this.guessTimer = setTimeout(() => {
+        this.setData({
+          isGuessShow: true,
+          isBeginSuess: true,
+        })
+      }, 3000)
+    }
   },
   "guess.bye": function (data) {//关闭竞猜
     let content = Object.assign({}, data, {userInfo: {nickname:'系统消息'}});
@@ -93,9 +94,6 @@ Page({
     if (options.info !== 'undefined') {
       let data = JSON.parse(options.info);
       this.initData(data);
-      if (data.is_admin) { //管理员权限
-        this.iSdminFetch();
-      }
     }
     // setInterval(()=>{
     //   a++;
@@ -112,8 +110,7 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    this.fetchGuessInfo();
-    this.fetchGuessTop();
+    
   },
 
   /**
@@ -254,6 +251,7 @@ Page({
     let flag = e.currentTarget.dataset.id;
     if (flag === 'ajax') {
       this.fetchGuessInfo();
+      this.fetchGuessTop();
     }
     this.setData({
       isGuessShow: !this.data.isGuessShow
@@ -300,7 +298,7 @@ Page({
   },
 
   bindChooseResult: function (e) {//用户竞猜选择
-    if (this.data.hasChoosed > 0) {
+    if (this.data.hasChoosed >= 0) {
       return;
     }
     let result = e.currentTarget.dataset.id;
