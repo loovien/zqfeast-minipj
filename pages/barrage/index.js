@@ -84,12 +84,12 @@ Page({
    */
   onLoad: function (options) {
     let _this = this;
-    let data = JSON.parse(options.info);
     if (options.info !== 'undefined') {
+      let data = JSON.parse(options.info);
       this.initData(data);
-    }
-    if (options.info !== 'undefined' && data.is_admin){ //管理员权限
-      this.iSdminFetch();
+      if (data.is_admin) { //管理员权限
+        this.iSdminFetch();
+      }
     }
     // setInterval(()=>{
     //   a++;
