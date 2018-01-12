@@ -6,10 +6,10 @@
       <view wx:if="{{!isConnect}}">正在连接弹幕服务器...</view>
       <view wx:if="{{isError}}">服务器开小差了，请退出该页面，重新进入再试一下，再试一下，请一定再试一下！</view>
     </view>
-    <view class="welcome" wx:if="{{isConnect}}">欢迎<view class="name">{{userInfo.nickName?userInfo.nickName:'游客'}}</view>进入<view class="color">【战旗直播年终狂欢】</view>请尽情的为战旗打CALL!更有丰富的弹幕礼物，等你来领！</view>
+    <view class="welcome" wx:if="{{isConnect}}">欢迎<view class="name">{{userInfo.nickname?userInfo.nickname:'游客'}}</view>进入<view class="color">【战旗直播年终狂欢】</view>请尽情的为战旗打CALL!更有丰富的弹幕礼物，等你来领！</view>
     <!-- 聊天区域 -->
     <!--自己加 myself 类-->
-    <view class="chat-li {{item.token==uid ?'myself':''}}" wx:key wx:for="{{danmakuList}}">
+    <view class="chat-li {{(item.token==uid && uid) ?'myself':''}}" wx:key wx:for="{{danmakuList}}">
       <view class="chat-li-cont">
         <view class="name">{{item.userInfo.nickname}}：</view>{{item.txt}}
       </view>
@@ -19,7 +19,7 @@
   <!-- 激活速弹加类 active-fast -->
   <view class="chat-bottom {{isHot ? 'active-fast':''}}" wx:if="{{isVerify}}">
     <view class="chat-input-area">
-      <input class="input-area"  bindinput='bindKeyInput'></input>
+      <input class="input-area"  bindinput='bindKeyInput' value='{{values}}'></input>
       <!-- 不能发送加类 disable -->
       <view class="send {{isDisable?'':'disable'}}" catchtap='bindSendDanmaku'>
         <image src="img/send.png"></image>
@@ -142,23 +142,23 @@
     </view>
     <view class="set-title">竞彩开始／关闭按钮</view>
     <!-- 开启竞猜加类 begin-guess -->
-    <view class="set-btn-area {{isSetGuessBegin?'begin-guess':''}}" catchtap='bindSetGuessBegin'>
+    <view class="set-btn-area {{!isSetGuessBegin?'begin-guess':''}}">
       <view class="btn-bg">
-        <view class="set-ibox-btn">{{isSetGuessBegin?'开启':'关闭'}}</view>
+        <view class="set-ibox-btn">{{!isSetGuessBegin?'开启':'关闭'}}</view>
       </view>
     </view>
-    <view class="mid-title" wx:if='{{!isSetGuessBegin}}'>竞彩结果设置</view>
-    <view class="set-choose" wx:if='{{!isSetGuessBegin}}'>
+    <view class="mid-title" wx:if='{{isSetGuessBegin}}'>竞彩结果设置</view>
+    <view class="set-choose" wx:if='{{isSetGuessBegin}}'>
       <!-- 选中加类 active -->
-      <view class="choose {{(setGuessResult==='A' && !isSetGuessBegin)?'active':''}}" data-id='A' catchtap='bindChooseGuess'>
+      <view class="choose {{(setGuessResult==='A' && isSetGuessBegin)?'active':''}}" data-id='A' catchtap='bindChooseGuess'>
         <view class="choose-1">A</view>
       </view>
-      <view class="choose {{(setGuessResult==='B' && !isSetGuessBegin)?'active':''}}" data-id='B' catchtap='bindChooseGuess'>
+      <view class="choose {{(setGuessResult==='B' && isSetGuessBegin)?'active':''}}" data-id='B' catchtap='bindChooseGuess'>
         <view class="choose-2">B</view>
       </view>
     </view>
     <!-- 激活以后加类 active-set-btn -->
-    <view class="set-real-btn {{isSetGuessBegin?'active-set-btn':setGuessResult !=''?'active-set-btn':''}}"  catchtap='bindSetGuessAffirm' data-id="{{isSetGuessBegin?'ok':setGuessResult !=''?'ok':'no'}}">确　定</view>
+    <view class="set-real-btn {{!isSetGuessBegin?'active-set-btn':setGuessResult !=''?'active-set-btn':''}}"  catchtap='bindSetGuessAffirm' data-id="{{!isSetGuessBegin?'ok':setGuessResult !=''?'ok':'no'}}">确　定</view>
   </view>
 
 </view>
