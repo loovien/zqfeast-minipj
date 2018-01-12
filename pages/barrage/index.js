@@ -405,7 +405,7 @@ Page({
           if (data.data.list.length<10) {
             let len = data.data.list.length;
             for (let i = 0; i < 10 - len;i++) {
-              data.data.list.push({ score: 5, nickname: "👑布里塞伊斯💤", rank: 1 });
+              data.data.list.push({});
             }
           }
           _this.setData({
