@@ -3,6 +3,7 @@ let apis = require("../../API/api.js");
 
 let strategyTypes = { //协议集合
   "common": function (data) { //弹幕列表
+    console.log(data);
     this.pushDanmakuList(data);
     this.setData({
       isMore: this.data.isMore + 1,
@@ -15,7 +16,9 @@ let strategyTypes = { //协议集合
       })
     }
   },
-  "guess.go": function () {//开启竞猜
+  "guess.go": function (data) {//开启竞猜
+    let content = Object.assign({}, data, {userInfo:{ nickname: '系统消息' }});
+    this.pushDanmakuList(content);
     this.guessTimer = setTimeout(() => {
       this.setData({
         isGuessShow: true,
@@ -23,7 +26,9 @@ let strategyTypes = { //协议集合
       })
     }, 3000)
   },
-  "guess.bye": function () {//关闭竞猜
+  "guess.bye": function (data) {//关闭竞猜
+    let content = Object.assign({}, data, {userInfo: {nickname:'系统消息'}});
+    this.pushDanmakuList(content);
     this.setData({
       isGuessShow: false,
       isBeginSuess: false,
@@ -44,6 +49,7 @@ Page({
     isVerify: false,//是否ID验证
     danmakuList: [], //弹幕列表
     isScroll: true,
+    values:null,//input value值
     hasChoosed: -1,//-1未操作
     userInfo: null,
     guessTop: false, //竞猜积分榜
@@ -174,18 +180,16 @@ Page({
       danmakuContent: value,
       isDisable: value.length > 0
     })
-
-    console.log(this.data.danmakuContent)
   },
 
   bindSendDanmaku: function (e) {  //发送弹幕
     if (this.data.danmakuContent.length <= 0) { //内容为空
       return;
     }
-
     this.sendSocketMessage(this.data.danmakuContent);
     this.setData({
       danmakuContent: '',
+      values:null,
     })
   },
 
@@ -358,7 +362,15 @@ Page({
       userInfo: data
     })
   },
-
+ 
+ //弹窗
+ alertFunc:function(msg){
+   wx.showToast({
+     title: msg,
+     image:'/pages/index/img/sb.png',
+     duration: 2000
+   })
+ },
   // ----------------接口交互-----------------//
   fetchGuessInfo: function () { //获取竞猜状态
     let _this = this;
@@ -451,7 +463,7 @@ Page({
 
   fetchGuessFlag: function () { //竞彩-开/关
     let result = this.data.setGuessResult;
-    let swich = Number(this.data.isSetGuessBegin);
+    let swich = Number(!this.data.isSetGuessBegin);
     let data = { uid: this.data.uid, status: swich };
     let _this = this;
     if (result === "A") {
@@ -461,10 +473,8 @@ Page({
     }
     apis.fetch(apis.API.ADMIN_GUESS_FLAG, data, 'POST')
       .then(res => {
-        if (res.data.code === 0) {
-          _this.setData({
-
-          })
+        if (res.data.code === 1) {
+          _this.alertFunc(res.data.message);
         }
       })
   },
