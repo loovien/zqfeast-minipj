@@ -101,10 +101,10 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-      setInterval(()=>{
-        let i = parseInt(Math.random()*7);
-        this.sendSocketMessage(this.data.hotList[i]);
-      },200)
+      // setInterval(()=>{
+      //   let i = parseInt(Math.random()*7);
+      //   this.sendSocketMessage(this.data.hotList[i]);
+      // },200)
   },
 
   /**
