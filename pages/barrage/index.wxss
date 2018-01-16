@@ -276,7 +276,7 @@ page .container{
 .guess-ibox{
   position:absolute;
   top:50%;left:50%;
-  margin:-502rpx 0 0 -319rpx;
+  margin:-554rpx 0 0 -319rpx;
   width:639rpx;height:1005rpx;
   z-index:10;
 }
@@ -458,8 +458,8 @@ page .container{
   /* display:none; */
   position:absolute;
   top:50%;left:50%;
-  margin:-514rpx 0 0 -308rpx;
-  width:616rpx;height:1028rpx;
+  margin:-564rpx 0 0 -308rpx;
+  width:616rpx;height:1022rpx;
   border:3rpx solid #1168b1;
   background:rgba(3, 24, 67, .96);
   z-index:11;
@@ -478,32 +478,60 @@ page .container{
   width:100%;height:100%;
 }
 
-.set-ibox .set-title{
+.set-title-tp{
   padding-top:26rpx;
-  height: 170rpx;line-height:170rpx;
+  height: 100rpx;line-height:100rpx;
+  font-size:32rpx;color:#fff;
+  text-align:center;
+}
+.set-tp-btn{
+  width:370rpx;height:86rpx;
+  line-height:86rpx;
+  margin:auto;
+  background:#446596;
   font-size:38rpx;color:#fff;
+  text-align:center;
+}
+.tp-begin{
+  background:linear-gradient(to bottom, #f22552, #ff476f);
+}
+.set-ibox .set-title{
+  margin-top:32rpx;
+  height:88rpx;line-height:88rpx;
+  font-size:32rpx;color:#fff;
   text-align:center;
 }
 .set-ibox .set-btn-area{
   height:210rpx;
-  margin-bottom:104rpx;
+  margin-bottom:94rpx;
   text-align:center;
 }
 .set-ibox .set-btn-area .btn-bg{
   display:inline-block;
-  width:210rpx;height:210rpx;
+  width:200rpx;height:200rpx;
   border-radius:100%;
   background:rgba(100, 119, 148, .4);
   text-align:center;
 }
 .set-ibox .set-btn-area .btn-bg .set-ibox-btn{
   display:inline-block;
-  width:170rpx;height:170rpx;
-  line-height:170rpx;
+  width:160rpx;height:160rpx;
+  line-height:160rpx;
   margin-top:20rpx;
   border-radius:100%;
   background:rgba(68, 101, 150, .72);
   font-size:40rpx;color:#fff;
+}
+
+.set-ibox .nums-guess{
+  height:130rpx;line-height: 130rpx;
+  font-size:28rpx;color:#fff;
+  text-align:center;
+}
+
+.set-ibox .nums-guess .text{
+  margin:0 10rpx;
+  color:#cae012;
 }
 
 .set-ibox .begin-guess .btn-bg{
@@ -520,13 +548,12 @@ page .container{
 }
 
 .set-ibox .set-choose{
-  margin-bottom:44rpx;
   text-align:center;
 }
 .set-ibox .set-choose .choose{
   position:relative;
   display:inline-block;
-  margin:40rpx 64rpx;
+  margin:30rpx 64rpx;
   width:130rpx;height:130rpx;
   line-height:130rpx;
   font-size:70rpx;color:#fff;
@@ -561,4 +588,17 @@ page .container{
   border-color:#3554d6;
   background:-webkit-linear-gradient(top, #052177, #1439bc);
   color:#fff;
+}
+
+.tp-btn{
+  position:fixed;
+  right:20rpx;
+  bottom:934rpx;
+  width:106rpx;height:140rpx;
+  z-index:5;
+}
+
+.tp-btn image{
+  display:block;
+  width:100%;height:100%;
 }

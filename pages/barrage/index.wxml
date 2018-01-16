@@ -7,7 +7,6 @@
       <view wx:if="{{isError}}">服务器开小差了，请退出该页面，重新进入再试一下，再试一下，请一定再试一下！</view>
     </view>
     <view class="welcome" wx:if="{{isConnect}}">欢迎<view class="name">{{userInfo.nickname?userInfo.nickname:'游客'}}</view>进入<view class="color">【战旗直播年终狂欢】</view>请尽情的为战旗打CALL!更有丰富的弹幕礼物，等你来领！</view>
-    <input></input>
     <!-- 聊天区域 -->
     <!--自己加 myself 类-->
     <view class="chat-li {{(item.token==uid && uid) ?'myself':''}}" wx:key wx:for="{{danmakuList}}">
@@ -141,12 +140,16 @@
     <view class="close" catchtap='bindSetGuess'>
       <image src="img/close.png"></image>
     </view>
+    <view class="set-title-tp">红毯投票按钮</view>
+    <!-- 开启加类 tp-begin -->
+    <view class="set-tp-btn tp-begin">开启</view>
     <view class="set-title">竞彩开始／关闭按钮</view>
     <!-- 开启竞猜加类 begin-guess -->
     <view class="set-btn-area {{!isSetGuessBegin?'begin-guess':''}}">
       <view class="btn-bg">
         <view class="set-ibox-btn">{{!isSetGuessBegin?'开启':'关闭'}}</view>
       </view>
+      <view class="nums-guess">这是第<text class="text">3</text>次竞猜</view>
     </view>
     <view class="mid-title" wx:if='{{isSetGuessBegin}}'>竞彩结果设置</view>
     <view class="set-choose" wx:if='{{isSetGuessBegin}}'>
@@ -160,6 +163,80 @@
     </view>
     <!-- 激活以后加类 active-set-btn -->
     <view class="set-real-btn {{!isSetGuessBegin?'active-set-btn':setGuessResult !=''?'active-set-btn':''}}"  catchtap='bindSetGuessAffirm' data-id="{{!isSetGuessBegin?'ok':setGuessResult !=''?'ok':'no'}}">确　定</view>
+  </view>
+
+  <!-- 投票按钮 -->
+  <view class="tp-btn">
+    <image src="img/tp-btn.png"></image>
+  </view>
+  <!-- 投票按钮End -->
+
+  <!-- 投票弹窗 -->
+  <view class="tp-ibox">
+    <image src="img/tp-ibox.png" class="tp-ibox-bg"></image>
+    <view class="tp-ibox-content">
+      <ul class="tp-ul">
+        <!-- 选中加类 active -->
+        <li class="tp-li active">
+          <image src="img/checker.png" class="checker"></image>
+          <image src="img/check.png" class="check"></image>
+          <view class="tp-name">斯蒂芬</view>
+        </li>
+        <li class="tp-li">
+          <image src="img/checker.png" class="checker"></image>
+          <image src="img/check.png" class="check"></image>
+          <view class="tp-name">斯蒂芬</view>
+        </li>
+        <li class="tp-li">
+          <image src="img/checker.png" class="checker"></image>
+          <image src="img/check.png" class="check"></image>
+          <view class="tp-name">斯蒂芬</view>
+        </li>
+        <li class="tp-li">
+          <image src="img/checker.png" class="checker"></image>
+          <image src="img/check.png" class="check"></image>
+          <view class="tp-name">斯蒂芬</view>
+        </li>
+        <li class="tp-li">
+          <image src="img/checker.png" class="checker"></image>
+          <image src="img/check.png" class="check"></image>
+          <view class="tp-name">斯蒂芬</view>
+        </li>
+        <li class="tp-li">
+          <image src="img/checker.png" class="checker"></image>
+          <image src="img/check.png" class="check"></image>
+          <view class="tp-name">斯蒂芬</view>
+        </li>
+        <li class="tp-li">
+          <image src="img/checker.png" class="checker"></image>
+          <image src="img/check.png" class="check"></image>
+          <view class="tp-name">斯蒂芬</view>
+        </li>
+        <li class="tp-li">
+          <image src="img/checker.png" class="checker"></image>
+          <image src="img/check.png" class="check"></image>
+          <view class="tp-name">斯蒂芬</view>
+        </li>
+        <li class="tp-li">
+          <image src="img/checker.png" class="checker"></image>
+          <image src="img/check.png" class="check"></image>
+          <view class="tp-name">斯蒂芬</view>
+        </li>
+        <li class="tp-li">
+          <image src="img/checker.png" class="checker"></image>
+          <image src="img/check.png" class="check"></image>
+          <view class="tp-name">斯蒂芬</view>
+        </li>
+      </ul>
+    </view>
+  </view>
+
+  <!-- 投票确认弹窗 -->
+  <view class="tp-real-ibox">
+    <image src="tp-ibox-1.png"></image>
+    <view class="title">还没开始</view>
+    <view class="btn-ok"></view>
+    <view class="btn-no"></view>
   </view>
 
 </view>
