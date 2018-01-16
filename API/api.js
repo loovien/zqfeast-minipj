@@ -13,7 +13,9 @@ const API = {
 }
 
 let fetch = function (url, data, type = 'GET') {
-
+  wx.showLoading({
+    mask:true,
+  });
   return new Promise((resolve, reject) => {
     wx.request({
       url: url,
@@ -24,10 +26,11 @@ let fetch = function (url, data, type = 'GET') {
       },
       success: function (res) {
         resolve(res);
+        wx.hideLoading()
       },
       fail: function (err) {
         wx.showToast({
-          title: '接口请求异常',
+          title: '接口请求异常!',
           icon: 'loading',
           duration: 2000
         })

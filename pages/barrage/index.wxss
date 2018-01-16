@@ -394,7 +394,7 @@ page .container{
 }
 
 .guess-ibox .guess-bottom .guess-tbody .myself .li{
-  margin-top:6rpx;
+  /* margin-top:6rpx; */
   color:#cae012;
 }
 
@@ -460,6 +460,10 @@ page .container{
   border:3rpx solid #1168b1;
   background:rgba(3, 24, 67, .96);
   z-index:11;
+}
+.open-height {
+  height: 700rpx;
+  top: 65%;
 }
 .set-ibox .close{
   position:absolute;

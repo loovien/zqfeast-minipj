@@ -1,6 +1,6 @@
 <view class="chat-content">
   <image class="chat-bg" src="img/bg.jpg"></image>
-  <scroll-view class="container" scroll-y   catchtouchend='bindIsScroll' 
+  <scroll-view class="container" scroll-y  catchtouchend='bindTips'   catchlongpress='bindIsScroll' 
   scroll-into-view='{{isScroll ? "":"n"}}last{{danmakuList.length}}'>
     <view class="connect">
       <view wx:if="{{!isConnect}}">正在连接弹幕服务器...</view>
@@ -136,7 +136,7 @@
   </view>
 
   <!-- 设置弹窗 -->
-  <view class="set-ibox" wx:if='{{isSetGuessState}}'>
+  <view class="set-ibox {{!isSetGuessBegin?'open-height':''}}" wx:if='{{isSetGuessState}}' >
     <view class="close" catchtap='bindSetGuess'>
       <image src="img/close.png"></image>
     </view>
