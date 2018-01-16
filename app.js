@@ -3,8 +3,6 @@ let api = require("API/api.js");
 App({
   onLaunch: function () {
     var that = this;
-    // this.getSystemInfo();
-    // console.log(this.fetchUserInfo());
   },
   fetchUserInfo: function (callback) {
     var that = this;
@@ -20,7 +18,6 @@ App({
           // 发送 res.code 到后台换取 openId, sessionKey, unionId    
           api.fetch(api.API.USER_OPENID, { code: resp.code })
             .then(res => {
-              console.log(res);
               if (res.data.code === 0) {
                 resolve(res.data.data);
                 that.globalData.loginInfo = res.data.data;
@@ -28,7 +25,6 @@ App({
                 wx.showToast({
                   title: '网络异常，请关闭后，重新进入！',
                 });
-                console.log(res.data.message)
               }
             })
             .catch(err => {
@@ -42,18 +38,18 @@ App({
         }
       })
     })
-    let userInfo = new Promise((resolve) => {
+    let userInfo = new Promise((resolve,reject) => {
       wx.getSetting({ // 获取用户信息
         success: function (resp) {
           if (!resp.authSetting['scope.userInfo']) {
             wx.authorize({
               scope: 'scope.userInfo',
               success: function (resp) {
-                console.log(resp);
-                console.log("授权成功")
+                // console.log("授权成功")
               },
               fail: function (resp) {
-                console.log("未授权")
+                reject(resp);
+                // console.log("未授权");
               }
             });
           }
@@ -66,6 +62,9 @@ App({
                 callback(resp.userInfo);
               }
               resolve(resp.userInfo);
+            },
+            fail:function(err) { //获取用户信息失败
+              reject(err);
             }
           });
         }
@@ -81,20 +80,4 @@ App({
     loginInfo: null,
     info: null,
   },
-  getSystemInfo: function () {
-    wx.getSystemInfo({
-      success: function (res) {
-        console.log(res.model)
-        console.log(res.pixelRatio)
-        console.log(res.windowWidth)
-        console.log(res.windowHeight)
-        console.log(res.language)
-        console.log(res.version)
-        console.log(res.platform)
-      }
-    })
-  },
-  dFun:function(){
-    console.log(11111111111);
-  }
 })

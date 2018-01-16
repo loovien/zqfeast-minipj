@@ -16,9 +16,9 @@ let strategyTypes = { //协议集合
     }
   },
   "guess.go": function (data) {//开启竞猜
-    let content = Object.assign({}, data, {userInfo:{ nickname: '系统消息' }});
+    let content = Object.assign({}, data, { userInfo: { nickname: '系统消息' } });
     this.pushDanmakuList(content);
-    if (this.data.isVerify){ //验证用户才能竞猜
+    if (this.data.isVerify) { //验证用户才能竞猜
       this.guessTimer = setTimeout(() => {
         this.setData({
           isGuessShow: true,
@@ -28,7 +28,7 @@ let strategyTypes = { //协议集合
     }
   },
   "guess.bye": function (data) {//关闭竞猜
-    let content = Object.assign({}, data, {userInfo: {nickname:'系统消息'}});
+    let content = Object.assign({}, data, { userInfo: { nickname: '系统消息' } });
     this.pushDanmakuList(content);
     this.setData({
       isGuessShow: false,
@@ -50,7 +50,7 @@ Page({
     isVerify: false,//是否ID验证
     danmakuList: [], //弹幕列表
     isScroll: true,
-    values:null,//input value值
+    values: null,//input value值
     hasChoosed: -1,//-1未操作
     userInfo: null,
     guessTop: false, //竞猜积分榜
@@ -81,9 +81,8 @@ Page({
       '小姐姐666~我为你打CALL',
       '帅帅帅帅帅帅！',
       '下一个奖是我的',
-      '这个节目是今晚最棒的！',
-      '100把大宝剑送给你'],
-    msg: { "type": "common", "txt": "", "token": "", color: "#fff" },//弹幕默认模板
+      '这个节目是今晚最棒的！'],
+    msg: { "type": "common", "txt": "", "token": "", color: "" },//弹幕默认模板
   },
 
   /**
@@ -91,6 +90,7 @@ Page({
    */
   onLoad: function (options) {
     let _this = this;
+    console.log(options);
     if (options.info !== 'undefined') {
       let data = JSON.parse(options.info);
       this.initData(data);
@@ -101,7 +101,10 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    
+      setInterval(()=>{
+        let i = parseInt(Math.random()*7);
+        this.sendSocketMessage(this.data.hotList[i]);
+      },200)
   },
 
   /**
@@ -177,14 +180,15 @@ Page({
     this.sendSocketMessage(this.data.danmakuContent);
     this.setData({
       danmakuContent: '',
-      values:null,
+      values: null,
     })
   },
 
   bindHotSend: function (e) { //快速弹幕发送
     let index = e.currentTarget.dataset.index;
     let content = this.data.hotList[index];
-    this.sendSocketMessage(content);
+    let color = `dm-color-${index}`;
+    this.sendSocketMessage(content,color);
     this.setData({
       isHot: !this.data.isHot,
     })
@@ -196,6 +200,11 @@ Page({
       isScroll: true
     })
     this.bindScroll();
+  },
+
+  //停止滚屏提示
+  bindTips: function () {
+
   },
 
   //---------------弹幕抽奖---------------//
@@ -333,7 +342,7 @@ Page({
 
   bindIsScroll: function (e) { //禁止弹幕滚屏
     this.setData({
-      isMore:0,
+      isMore: 0,
       isScroll: false,
     })
   },
@@ -352,15 +361,15 @@ Page({
       userInfo: data
     })
   },
- 
- //弹窗
- alertFunc:function(msg){
-   wx.showToast({
-     title: msg,
-     image:'/pages/index/img/sb.png',
-     duration: 2000
-   })
- },
+
+  //弹窗
+  alertFunc: function (msg) {
+    wx.showToast({
+      title: msg,
+      image: '/pages/index/img/sb.png',
+      duration: 2000
+    })
+  },
   // ----------------接口交互-----------------//
   fetchGuessInfo: function () { //获取竞猜状态
     let _this = this;
@@ -402,9 +411,9 @@ Page({
       .then(res => {
         let data = res.data;
         if (data.code === 0) {
-          if (data.data.list.length<10) {
+          if (data.data.list.length < 10) {
             let len = data.data.list.length;
-            for (let i = 0; i < 10 - len;i++) {
+            for (let i = 0; i < 10 - len; i++) {
               data.data.list.push({});
             }
           }
@@ -518,19 +527,16 @@ Page({
     })
   },
 
-  sendSocketMessage: function (content) { //socket发送消息
+  sendSocketMessage: function (content,color) { //socket发送消息
+    color = color || `dm-color-${parseInt(Math.random()*7)}`;
     let msg = this.data.msg;
     msg.txt = content;
     msg.token = this.data.uid;
+    msg.color = color;
     wx.sendSocketMessage({
       data: JSON.stringify(msg),
     })
   },
-
-  closeSocket: function () { //关闭socket
-
-  },
-
   calcStrategyTypes: function (type, data) { //下发协议计算
     strategyTypes[type].call(this, data);
   },

@@ -10,7 +10,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    END_TIME: parseInt(+new Date("2018/01/15,17:30:00")),//活动结束时间
+    END_TIME: parseInt(+new Date("2018/01/18,17:30:00")),//活动结束时间
     currentTime: '000000', //倒计时时间
     isBegin: false, //倒计时是否结束
     inputValue: [],//身份ID
@@ -29,6 +29,8 @@ Page({
     this.setTimes();
     app.fetchUserInfo().then(res => {
       _this.initData(res);
+    }).catch(err => {
+      
     })
   },
 
@@ -45,7 +47,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+   
   },
 
   /**
@@ -168,13 +170,15 @@ Page({
             })
           }
         })
+    }).catch(err => {
+      _this.impowerAlert();
     })
   },
 
   //进入弹幕空间
   bindViewDanmaku: function () {
     app.fetchUserInfo().then(res => {
-      let data = Object.assign(res[0],res[1]);
+      let data = Object.assign(res[0], res[1]);
       data.nickname = data.nickName; //大小写切换
       delete data.nickName;
       if (res[0].uid) { //已绑定用户
@@ -187,10 +191,14 @@ Page({
           url: `../barrage/index?info`,
         })
       }
+    }).catch(err => {//没授权用户
+      wx.navigateTo({
+        url: `../barrage/index?info`,
+      })
     })
   },
 
-//隐藏提示
+  //隐藏提示
   bindcVerifyCancel: function () {
     this.setData({
       verifyLayer: false,
@@ -205,4 +213,26 @@ Page({
       isVerify: data[0].uid,
     })
   },
+
+  //授权弹窗
+  impowerAlert:function(){
+    wx.showModal({
+      title: '提示',
+      content: '绑定弹幕身份ID，需授权访问用户信息！',
+      confirmText:'授权',
+      success: function (res) {
+        if (res.confirm) {//确定
+          wx.openSetting({
+            success: (res) => {
+              res.authSetting = {
+                "scope.userInfo": true,
+              }
+            }
+          })
+        } else if (res.cancel) {//取消
+          // todo
+        }
+      }
+    })
+  }
 })
