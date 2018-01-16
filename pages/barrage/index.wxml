@@ -7,6 +7,7 @@
       <view wx:if="{{isError}}">服务器开小差了，请退出该页面，重新进入再试一下，再试一下，请一定再试一下！</view>
     </view>
     <view class="welcome" wx:if="{{isConnect}}">欢迎<view class="name">{{userInfo.nickname?userInfo.nickname:'游客'}}</view>进入<view class="color">【战旗直播年终狂欢】</view>请尽情的为战旗打CALL!更有丰富的弹幕礼物，等你来领！</view>
+    <input></input>
     <!-- 聊天区域 -->
     <!--自己加 myself 类-->
     <view class="chat-li {{(item.token==uid && uid) ?'myself':''}}" wx:key wx:for="{{danmakuList}}">

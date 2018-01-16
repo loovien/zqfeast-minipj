@@ -92,9 +92,12 @@ page .container{
   line-height:66rpx;
   padding:0 18rpx;
   width:424rpx;
-  border:2rpx solid #0ba1e9;
   background:rgba(7,46,135,1);
-  font-size:32rpx;color:#f4fbff;
+  font-size:32rpx;
+  color:#f4fbff;
+  box-shadow:0 0 0 2rpx #0ba1e9;
+  margin-top:2rpx;
+  margin-left:2rpx;
 }
 
 .chat-bottom .chat-input-area .fast,
