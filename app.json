@@ -6,6 +6,7 @@
   ],
   "window":{
     "backgroundTextStyle":"light",
+    "backgroundColor":"#151650",
     "navigationBarBackgroundColor": "#151650",
     "navigationBarTitleText": "战旗直播年终狂欢",
     "navigationBarTextStyle":"light"

@@ -78,7 +78,7 @@ page .container{
   height:70rpx; 
   width:calc(100% - 28rpx);
   background:rgba(54, 95, 186, .5);
-  z-index:4;
+  z-index:6;
 }
 
 .chat-bottom .chat-input-area{
@@ -394,7 +394,7 @@ page .container{
 }
 
 .guess-ibox .guess-bottom .guess-tbody .myself .li{
-  margin-top:6rpx;
+  /* margin-top:6rpx; */
   color:#cae012;
 }
 
@@ -452,7 +452,7 @@ page .container{
 }
 
 .set-ibox{
-  display:none;  
+  /* display:none; */
   position:absolute;
   top:50%;left:50%;
   margin:-514rpx 0 0 -308rpx;
@@ -460,6 +460,10 @@ page .container{
   border:3rpx solid #1168b1;
   background:rgba(3, 24, 67, .96);
   z-index:11;
+}
+.open-height {
+  height: 700rpx;
+  top: 65%;
 }
 .set-ibox .close{
   position:absolute;
