@@ -76,6 +76,15 @@ Page({
     isGuessLayerShow: false, //用户竞猜确认
     isBootom: false,//是否到底部
     isBeginSuess: false,//竞猜活动是否开启
+    voteState: false,//投票状态
+    guessNumber: 1,//竞猜次数
+    voteLayerState: false, //投票确认弹框状态
+    voteLayerMsg: '投票未开启',//投票确认弹框提示语
+    voteBoxState: false, //投票弹窗状态
+    isChecker: false,//是否选择投票
+    voteList: [],//投票列表
+    checkerId: '', //投票ID
+    voteAjax:false, //是否发起ajax请求
     hotList: [ //速弹列表
       '战旗威武！',
       '小姐姐666~我为你打CALL',
@@ -101,10 +110,10 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-      // setInterval(()=>{
-      //   let i = parseInt(Math.random()*7);
-      //   this.sendSocketMessage(this.data.hotList[i]);
-      // },200)
+    // setInterval(()=>{
+    //   let i = parseInt(Math.random()*7);
+    //   this.sendSocketMessage(this.data.hotList[i]);
+    // },200)
   },
 
   /**
@@ -188,7 +197,7 @@ Page({
     let index = e.currentTarget.dataset.index;
     let content = this.data.hotList[index];
     let color = `dm-color-${index}`;
-    this.sendSocketMessage(content,color);
+    this.sendSocketMessage(content, color);
     this.setData({
       isHot: !this.data.isHot,
     })
@@ -266,6 +275,7 @@ Page({
 
     if (flag === "ajax") { //带有ajax标签才会发起请求
       this.fetchGuessInfo();
+      this.fetchVoteState();
     }
   },
   bindSetGuessAffirm: function (e) { //确认竞猜
@@ -330,6 +340,81 @@ Page({
       chooseGuessResult: '' //取消重置选择
     })
   },
+  // ---------------------投票------------------
+
+  bindSetVote: function () {
+    this.setData({
+      voteState: !this.data.voteState,
+    })
+    this.fetchSetVoteState();
+  },
+  bindChooseVote: function () {
+    this.fetchVoteState('user');
+  },
+  //关闭弹窗
+  bindCloseVoteLayer: function () {
+    this.setData({
+      voteBoxState: false,
+    })
+  },
+
+  //选择用户
+  bindChooseItem: function (e) {
+    let id = e.currentTarget.dataset.id;
+    let flag = e.currentTarget.dataset.flag;
+    // let arr = this.data.checkerId;
+    let list = this.data.voteList;
+
+    let index = list.findIndex(item => {
+      return item.id === id
+    })
+    //已投票不执行
+    if (flag === 1) {
+      return;
+    }
+    list[index].uvoted = !flag;
+
+
+    // console.log(index);
+    // list.forEach((item, index) => {
+    //   if (index === id) {
+    //     item.uvoted = !flag;
+    // if (item.uvoted ===true) {
+    //   arr.push(item.id);
+    // } else{
+    //   let index = arr.findIndex(i=>{
+    //     return i===item.id
+    //   });
+    //   if(index !== -1) {
+    //     arr.splice(index,1);
+    //   }
+    // }
+    //   }
+    // })
+    this.setData({
+      // voteList: list,
+      voteLayerState: true,
+      checkerId: id,
+    })
+    // if (arr.length === 5) { //已选择5个
+    //   this.setData({
+    //     voteLayerState: true
+    //   })
+    //   return;
+    // }
+  },
+
+  //提交选择
+  bindCommitVote: function (e) {
+    let flag = e.currentTarget.dataset.ajax;
+    if(!flag) { //不提交ajax
+      this.setData({
+        voteLayerState:false,
+      })
+      return;
+    }
+    this.fetchChooseVote();
+  },
 
   //  ---------------------公用函数-------------
   bindScroll: function () {  //滚动到最底部
@@ -379,6 +464,7 @@ Page({
         if (res.data.code === 0) { //成功
           _this.setData({
             isBeginSuess: res.data.data.status,
+            guessNumber: res.data.data.index,
             chooseGuessResult: _stringToNumber(res.data.data.u),
             isSetGuessBegin: res.data.data.status,
             hasChoosed: res.data.data.u.choice,
@@ -411,7 +497,7 @@ Page({
       .then(res => {
         let data = res.data;
         if (data.code === 0) {
-          if (data.data.list.length < 10) {
+          if (data.data.list && data.data.list.length < 10) {
             let len = data.data.list.length;
             for (let i = 0; i < 10 - len; i++) {
               data.data.list.push({});
@@ -484,6 +570,106 @@ Page({
       })
   },
 
+  //管理员获取投票状态
+  fetchVoteState: function (type = 'admin') {
+    const _this = this;
+    apis.fetch(apis.API.ADMIN_VOTE_STATE, { uid: this.data.uid })
+      .then(res => {
+        if (res.data.code === 0) {
+          if (type === 'admin') { //管理员
+            _this.setData({
+              voteState: res.data.data.status
+            })
+          } else if (type === 'user') { //用户
+            if (!res.data.data.status) { //关闭状态
+              _this.setData({
+                voteLayerState: true,
+                voteAjax: false,
+              })
+            } else { //开启状态
+              _this.setData({
+                voteLayerState: false,
+                voteAjax:true,
+                voteLayerMsg: '请确认你的选择',
+              })
+              _this.fetchVoteList();
+            }
+          }
+        }
+      })
+  },
+
+  //设置投票开关
+  fetchSetVoteState: function () {
+    const _this = this;
+    let data = {
+      uid: this.data.uid,
+      status: Number(this.data.voteState)
+    }
+    apis.fetch(apis.API.ADMIN_VOTE_SWITCHER, data, "POST")
+      .then(res => {
+        if (res.data.code === 0) { //成功
+          _this.setData({
+            isSetGuessState: false
+          })
+        } else { //失败
+          _this.alertFunc(res.data.message);
+        }
+      })
+  },
+
+  //用户投票
+  fetchChooseVote: function () {
+    let _this = this;
+    let data = {
+      uid: this.data.uid,
+      voteId: this.data.checkerId
+    }
+    apis.fetch(apis.API.VOTE_DONE, data, "POST")
+      .then(res => {
+        if (res.data.code === 0) {
+          _this.setData({
+            voteLayerState: false
+          })
+          _this.fetchVoteList();
+        } else if (res.data.code === 1) {
+          this.setData({
+            voteLayerMsg: '抱歉, 您的投票次数用完了',
+            voteAjax:false,
+          })
+        }
+      })
+  },
+
+  //投票列表
+  fetchVoteList: function () {
+    const _this = this;
+    let data = {
+      uid: this.data.uid,
+      page: 1,
+      size: 999999,
+    }
+    apis.fetch(apis.API.VOTE_LIST, data)
+      .then(res => {
+        if (res.data.code === 0) {
+          let list = res.data.data.list;
+          // list.forEach(item => {
+          //   item.state = false;
+          // })
+          _this.setData({
+            voteList: list,
+            voteBoxState: true,
+          })
+        }
+      })
+  },
+  //取消提交
+  bindCancelVote: function () {
+    this.setData({
+      voteLayerState: false,
+    })
+  },
+  //---------------------------socket------------------
   socketFunction: function () { //socket连接
     let _this = this;
     //建立连接
@@ -527,8 +713,8 @@ Page({
     })
   },
 
-  sendSocketMessage: function (content,color) { //socket发送消息
-    color = color || `dm-color-${parseInt(Math.random()*7)}`;
+  sendSocketMessage: function (content, color) { //socket发送消息
+    color = color || `dm-color-${parseInt(Math.random() * 7)}`;
     let msg = this.data.msg;
     msg.txt = content;
     msg.token = this.data.uid;

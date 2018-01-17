@@ -465,8 +465,8 @@ page .container{
   z-index:11;
 }
 .open-height {
-  height: 700rpx;
-  top: 65%;
+  height: 770rpx;
+  top: 55%;
 }
 .set-ibox .close{
   position:absolute;
@@ -602,3 +602,83 @@ page .container{
   display:block;
   width:100%;height:100%;
 }
+
+.tp-ibox {
+  position: fixed;
+  top: 50%;
+  left: 50%; 
+  margin:-520rpx 0 0 -320rpx; 
+  width: 639rpx;
+  height: 1005rpx;
+  z-index: 5;
+}
+
+.tp-ibox image {
+  display: block;
+  width: 100%;height: 100%;
+}
+
+.tp-ibox .close {
+  width: 40rpx;height: 40rpx;
+  position: absolute;
+  top: 0;right: 0;
+}
+.tp-ibox-content {
+  position: absolute;
+  width: 100%;height: calc(100% - 214rpx);
+  overflow-y: auto;
+  top: 214rpx;left: 0;
+  font-size: 32rpx;
+  color: #fff;
+}
+.tp-ibox-content .check {
+  display: block;
+  width: 48rpx;
+  height: 48rpx;
+  margin-right: 20rpx;
+
+}
+.tp-ibox-content .tp-ul {
+   display: flex;
+   justify-content: space-between;
+   flex-wrap: wrap; 
+    padding: 0 76rpx; 
+}
+
+.tp-ibox-content .tp-ul li {
+  display: flex;
+  justify-content: flex-start;
+  margin: 40rpx 0;
+  width: 50%;
+}
+
+.tp-real-ibox {
+  position: fixed;
+  top: 50%;left: 50%;
+  margin: -105rpx 0 0 -260rpx;
+  width: 520rpx;height: 210rpx;
+  z-index: 6;
+}
+.tp-real-ibox image {
+  display: block;
+  width: 100%;height: 100%;
+}
+.tp-real-ibox .title {
+  position: absolute;
+  top: 0;left: 0;
+  color: #fff;font-size: 32rpx;
+  width: 100%;
+  text-align: center;
+  line-height: 130rpx;
+}
+.tp-real-ibox .btn-no,.tp-real-ibox .btn-ok {
+  width: 260rpx;height: 70rpx;
+  position: absolute;
+}
+.tp-real-ibox .btn-no {
+  bottom: 0;left: 0;
+}
+.tp-real-ibox .btn-ok {
+  bottom:0;right: 0;
+}
+
