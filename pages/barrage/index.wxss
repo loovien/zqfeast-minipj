@@ -641,7 +641,7 @@ page .container{
 .tp-ibox-content .tp-ul {
    display: flex;
    flex-wrap: wrap; 
-    padding: 0 76rpx 0 120rpx; 
+    padding-left: 60rpx; 
 }
 
 .tp-ibox-content .tp-ul li {
@@ -670,6 +670,7 @@ page .container{
   text-align: center;
   line-height: 130rpx;
 }
+
 .tp-real-ibox .btn-no,.tp-real-ibox .btn-ok {
   width: 260rpx;height: 70rpx;
   position: absolute;
