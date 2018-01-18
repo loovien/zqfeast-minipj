@@ -182,6 +182,7 @@
             <image src="img/checker.png" class="check" wx:if='{{item.uvoted}}'></image>  
            <image src="img/check.png" class="check" wx:else></image> 
           <view class="tp-name">{{item.nickname}}</view>
+          <view class='top'>：{{item.vote_cnt}}</view>
         </li>
       </ul>
     </scroll-view>
