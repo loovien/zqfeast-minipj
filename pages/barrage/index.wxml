@@ -166,7 +166,7 @@
   </view>
 
   <!-- 投票按钮 -->
-  <view class="tp-btn" catchtap='bindChooseVote'>
+  <view class="tp-btn" catchtap='bindChooseVote' wx:if='{{isVerify}}'>
     <image src="img/tp-btn.png"></image>
   </view>
   <!-- 投票按钮End -->

@@ -4,8 +4,14 @@ let apis = require("../../API/api.js");
 let strategyTypes = { //协议集合
   "common": function (data) { //弹幕列表
     this.pushDanmakuList(data);
+    let num = this.data.isMore;
+    if (parseInt(num) >= 999) { //超出999=>'999+'
+     num = '999+';
+    } else {
+      num += 1;
+    }
     this.setData({
-      isMore: this.data.isMore + 1,
+      isMore: num,
     })
   },
   "luck": function (data) { //中奖
@@ -79,12 +85,13 @@ Page({
     voteState: false,//投票状态
     guessNumber: 1,//竞猜次数
     voteLayerState: false, //投票确认弹框状态
-    voteLayerMsg: '投票未开启',//投票确认弹框提示语
+    voteLayerMsg: '',//投票确认弹框提示语
     voteBoxState: false, //投票弹窗状态
     isChecker: false,//是否选择投票
     voteList: [],//投票列表
     checkerId: '', //投票ID
-    voteAjax:false, //是否发起ajax请求
+    voteAjax: false, //是否发起ajax请求
+    chooseCountState: true, //投票状态
     hotList: [ //速弹列表
       '战旗威武！',
       '小姐姐666~我为你打CALL',
@@ -110,10 +117,10 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    // setInterval(()=>{
-    //   let i = parseInt(Math.random()*7);
+    // setInterval(() => {
+    //   let i = parseInt(Math.random() * 7);
     //   this.sendSocketMessage(this.data.hotList[i]);
-    // },200)
+    // }, 200)
   },
 
   /**
@@ -190,6 +197,7 @@ Page({
     this.setData({
       danmakuContent: '',
       values: null,
+      isDisable: false,
     })
   },
 
@@ -213,7 +221,9 @@ Page({
 
   //停止滚屏提示
   bindTips: function () {
-
+    this.setData({
+      isHot: false,
+    })
   },
 
   //---------------弹幕抽奖---------------//
@@ -396,6 +406,12 @@ Page({
       voteLayerState: true,
       checkerId: id,
     })
+
+    if (this.data.chooseCountState) { //次数没超5次
+      this.setData({
+        voteLayerMsg: `请确认您的选择：${list[index].nickname}`,
+      })
+    }
     // if (arr.length === 5) { //已选择5个
     //   this.setData({
     //     voteLayerState: true
@@ -407,9 +423,9 @@ Page({
   //提交选择
   bindCommitVote: function (e) {
     let flag = e.currentTarget.dataset.ajax;
-    if(!flag) { //不提交ajax
+    if (!flag) { //不提交ajax
       this.setData({
-        voteLayerState:false,
+        voteLayerState: false,
       })
       return;
     }
@@ -585,12 +601,12 @@ Page({
               _this.setData({
                 voteLayerState: true,
                 voteAjax: false,
+                voteLayerMsg: '抱歉，活动暂未开启',
               })
             } else { //开启状态
               _this.setData({
                 voteLayerState: false,
-                voteAjax:true,
-                voteLayerMsg: '请确认你的选择',
+                voteAjax: true,
               })
               _this.fetchVoteList();
             }
@@ -634,8 +650,9 @@ Page({
           _this.fetchVoteList();
         } else if (res.data.code === 1) {
           this.setData({
-            voteLayerMsg: '抱歉, 您的投票次数用完了',
-            voteAjax:false,
+            voteLayerMsg: '抱歉, 您的投票次数5次已用完',
+            voteAjax: false,
+            chooseCountState: false,
           })
         }
       })

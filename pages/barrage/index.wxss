@@ -186,7 +186,7 @@ page .container{
   position:fixed;
   top:50%;left:50%;
   width:639rpx;height:1005rpx;
-  margin:-502rpx 0 0 -320rpx;
+  margin:-538rpx 0 0 -320rpx;
   z-index:10;
 }
 .program-ibox image{
@@ -640,15 +640,14 @@ page .container{
 }
 .tp-ibox-content .tp-ul {
    display: flex;
-   justify-content: space-between;
    flex-wrap: wrap; 
-    padding: 0 76rpx; 
+    padding: 0 76rpx 0 120rpx; 
 }
 
 .tp-ibox-content .tp-ul li {
   display: flex;
   justify-content: flex-start;
-  margin: 40rpx 0;
+  margin: 20rpx 0;
   width: 50%;
 }
 
