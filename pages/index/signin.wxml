@@ -3,48 +3,57 @@
   <!-- 成功以后加类 done -->
   <view class="section done1">
     <!-- 验证失败加类 fail -->
-    <view class="input-area fail">
-      <view class="yz-area">
+    <view class="input-area {{isRight ? '' : 'fail'}}" >
+      <view class="yz-area" bindtap="bindButtonTap">
         <image class="yz-sb-icon"src="img/sb.png" ></image>
         <view class="yz-text">验证失败，请重新输入</view>
       </view>
       <image class="main-number" src="img/input.png"></image>
-      <input class="num-input" type='number'  maxlength="6" bindinput='bindKeyInput' focus="{{focus}}" />
+      <input class="num-input" type='number' confirm-type='done'  maxlength="6" bindinput='bindKeyInput' 
+      focus="{{focus && !isVerify}}" />
       <view class='number' bindtap="bindButtonTap">
-        <text class="text text-1">1</text>
-        <text class="text text-2">2</text>
-        <text class="text text-3">3</text>
-        <text class="text text-4">4</text>
-        <text class="text text-5">5</text>
-        <text class="text text-6">6</text>
+        <text class="text text-1">{{inputValue[0]}}</text>
+        <text class="text text-2">{{inputValue[1]}}</text>
+        <text class="text text-3">{{inputValue[2]}}</text>
+        <text class="text text-4">{{inputValue[3]}}</text>
+        <text class="text text-5">{{inputValue[4]}}</text>
+        <text class="text text-6">{{inputValue[5]}}</text>
       </view>
     </view>
     <view class="btn-area">
-      <view class="btn" bindtap="bindButtonTap">
+      <view class="btn" bindtap="bindButtonTap" data-id='ajax'>
         <image class="btn-1" src="img/btn-1.png"></image>
       </view>
-      <view class="btn" bindtap="bindButtonTap">
+      <view class="btn" bindtap="bindViewDanmaku">
         <image class="btn-1" src="img/btn-2.png"></image>
       </view>
-      <view class="btn2" bindtap="bindButtonTap">
+      <view class="btn2">
         <image class="btn-2" src="img/btn-3.png"></image>
       </view>
       <view class="title">您也可以直接不输入身份ID直接进入，但不能参与弹幕互动哟</view>
     </view>
     <!-- 年会开始加类 begin -->
-    <view class="times begin">
+    <view class=" times {{isBegin ?'begin':''}}">
       <image class="times-img-top" src="img/num-top.png"></image>
       <image class="times-img" src="img/num.png"></image>
       <ul class="time-ul">
-        <li class="time time-1">1</li>
-        <li class="time time-2">2</li>
-        <li class="time time-3">3</li>
-        <li class="time time-4">4</li>
-        <li class="time time-5">5</li>
-        <li class="time time-6">6</li>
+        <li class="time time-1">{{currentTime[0]}}</li>
+        <li class="time time-2">{{currentTime[1]}}</li>
+        <li class="time time-3">{{currentTime[2]}}</li>
+        <li class="time time-4">{{currentTime[3]}}</li>
+        <li class="time time-5">{{currentTime[4]}}</li>
+        <li class="time time-6">{{currentTime[5]}}</li>
       </ul>
       <view class="title-begin">年会已开始</view>
       <view class="title-bottom">晚会将于2018年1月25日晚 17:30 正式开始</view>
     </view>
   </view>
+</view>
+
+<!-- 确定弹窗 -->
+<view class="index-real-ibox" wx:if='{{verifyLayer}}'>
+  <image src="img/real-ibox-bg.png"></image>
+  <view class="ibox-title">{{inputValue}}</view>
+  <view class="btn-1" catchtap='bindVerifyOk'></view>
+  <view class="btn-2" catchtap='bindcVerifyCancel'></view>
 </view>

@@ -2,13 +2,13 @@
   "debug":"true",
   "pages":[
     "pages/index/signin",
-    "pages/index/index",
     "pages/barrage/index"
   ],
   "window":{
     "backgroundTextStyle":"light",
-    "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "战旗年会",
-    "navigationBarTextStyle":"black"
+    "backgroundColor":"#151650",
+    "navigationBarBackgroundColor": "#151650",
+    "navigationBarTitleText": "战旗直播年终狂欢",
+    "navigationBarTextStyle":"light"
   }
 }

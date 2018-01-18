@@ -1,7 +1,7 @@
 {
 	"description": "项目配置文件。",
 	"setting": {
-		"urlCheck": true,
+		"urlCheck": false,
 		"es6": true,
 		"postcss": true,
 		"minified": true,
@@ -10,7 +10,7 @@
 	"compileType": "miniprogram",
 	"libVersion": "1.7.0",
 	"appid": "wx9add944469d1da31",
-	"projectname": "战旗年会",
+	"projectname": "%E6%88%98%E6%97%97%E5%B9%B4%E4%BC%9A",
 	"condition": {
 		"search": {
 			"current": -1,
