@@ -14,7 +14,7 @@ let strategyTypes = { //协议集合
       isMore: num,
     })
   },
-  "luck": function (data) { //中奖
+  "lucky": function (data) { //中奖
     if (data.token == this.data.uid) { //token值等于UID值中奖
       this.setData({
         isWinning: true

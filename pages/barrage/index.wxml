@@ -117,7 +117,7 @@
   <!-- 节目单列表弹窗 -->
   <view class="program-ibox" wx:if="{{isProgramState}}">
     <view class="close" catchtap='bindProgramLayer'></view>
-    <image src="img/program-bg.png"></image>
+    <image src="https://luckybb.zhanqi.tv/static/img/menu.jpg"></image>
   </view>
 
   <!-- 中奖弹窗 -->
