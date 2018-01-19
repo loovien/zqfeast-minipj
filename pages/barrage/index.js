@@ -13,6 +13,7 @@ let strategyTypes = { //协议集合
     this.setData({
       isMore: num,
     })
+
   },
   "lucky": function (data) { //中奖
     if (data.token == this.data.uid) { //token值等于UID值中奖
@@ -117,10 +118,7 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    // setInterval(() => {
-    //   let i = parseInt(Math.random() * 7);
-    //   this.sendSocketMessage(this.data.hotList[i]);
-    // }, 200)
+ 
   },
 
   /**
@@ -128,12 +126,19 @@ Page({
    */
   onShow: function () {
     this.socketFunction();
+    // setInterval(() => {
+    //   let i = parseInt(Math.random() * 7);
+    //   this.sendSocketMessage(this.data.hotList[i]);
+    // }, 1000)
   },
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-
+    wx.closeSocket();
+    this.setData({
+      danmakuList: []
+    })
   },
 
   /**
@@ -255,7 +260,6 @@ Page({
     danmakuList.push(list)
     this.setData({
       danmakuList: danmakuList,
-      danmakuContent: '',
     })
   },
   //---------------节目单------------------//
@@ -705,8 +709,8 @@ Page({
 
     //接收数据
     wx.onSocketMessage(function (res) {
-      console.log('---------------------接收数据------------------')
-      console.log(res);
+      // console.log('---------------------接收数据------------------')
+      // console.log(res);
       let data = JSON.parse(res.data);
       _this.calcStrategyTypes(data.type, data);
     });
