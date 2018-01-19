@@ -5,16 +5,20 @@ const API = {
   GUESS_INFO: BASEURL + '/common/guess/info.json', //获取竞猜状态
   GUESS_CHOICE: BASEURL + '/common/guess/choice.json', //提交竞猜答案
   GUESS_TOP: BASEURL + '/common/guess/top.json',//竞猜排行榜
+  VOTE_DONE: BASEURL + "/common/vote/done.json",//用户投票
+  VOTE_LIST: BASEURL + "/common/vote/list.json", //投票列表
   ADMIN_LUCKY_NUM: BASEURL + '/admin/luckydog/num.json',//获取中奖用户数量
   ADMIN_LOTTERY_INFO: BASEURL + '/admin/lottery/info.json', //管理员获取弹幕抽奖开关信息
   ADMIN_LOTTERY_FLAG: BASEURL + '/admin/lottery/switcher.json',//管理员开启关闭弹幕关闭弹幕抽奖
   ADMIN_GUESS_FLAG: BASEURL + '/admin/guess/switcher.json', //管理员开启关闭竞猜 
+  ADMIN_VOTE_STATE: BASEURL + "/admin/vote/info.json",//管理员投票状态
+  ADMIN_VOTE_SWITCHER: BASEURL + "/admin/vote/switcher.json",//管理员开启关闭投票
   WSS: 'wss://luckybb.zhanqi.tv/websocket' //wss连接
 }
 
 let fetch = function (url, data, type = 'GET') {
   wx.showLoading({
-    mask:true,
+    mask: true,
   });
   return new Promise((resolve, reject) => {
     wx.request({
